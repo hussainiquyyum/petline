@@ -1,0 +1,114 @@
+<!-- BEGIN pos -->
+<!-- <div class="search-container">
+	<div class="input-group">
+		<i class="bi bi-search"></i>
+		<input type="text" placeholder="Search or ask a question">
+		<i class="bi bi-mic"></i>
+	</div>
+	<button class="btn border-0" *ngIf="listType() == 'long'"  (click)="listType.set('list')">
+		<i class="bi bi-view-list"></i>
+	</button>
+	<button class="btn border-0" *ngIf="listType() == 'list'"  (click)="listType.set('long')">
+		<i class="bi bi-view-stacked"></i>
+	</button>
+</div> -->
+<app-loader [isLoading]="isLoading"></app-loader>
+<card class="filter-container" *ngIf="filters">
+	<card-body class="d-flex">
+		<span class="badge bg-dark" (click)="clearFilter()"> <span class="badge-text">Clear All <i class="bi bi-x"></i></span></span>
+		<span class="badge bg-dark" *ngIf="filters.animalTypes"> <span class="badge-text">Animal Type: {{filters.animalTypes}} </span></span>
+		<span class="badge bg-dark" *ngIf="filters.selectedBreed"> <span class="badge-text">Breed: {{getBreedName(filters.selectedBreed)}} </span></span>
+	</card-body>
+</card>
+
+
+
+<card class="pos" id="pos" [ngClass]="{ 'pos-mobile-sidebar-toggled': mobileSidebarToggled }">
+	<card-body class="pos-container d-lg-flex">
+		<!-- BEGIN pos-content -->
+		<div class="pos-content">
+			<ng-scrollbar>
+				<div class="pos-content-container h-100 p-4">
+					<div class="row gx-4" 
+						infinite-scroll
+						[infiniteScrollDistance]="4"
+						[infiniteScrollThrottle]="1000"
+						(scrolled)="onScrollDown()"
+					>
+						@for (item of data; track $index) {
+							<div class="col-xxl-3 col-xl-4 col-lg-6 col-md-4 col-sm-6 pb-4">
+								<!-- BEGIN card -->
+								<card class="h-100">
+									<card-body class="h-100 p-1">
+										<div class="item-card{{listType() == 'list' ? '-list' : ''}}">
+											<!-- <img [src]="getUrl(item.images[0])" alt="Fluffy the Cat"> -->
+											@if (item.images) {
+												<ngb-carousel>
+													<ng-template ngbSlide *ngFor="let image of item.images">
+														<div class="picsum-img-wrapper">
+															<img [src]="image" alt="Random first slide" />
+														</div>
+													</ng-template>
+												</ngb-carousel>
+											}
+											<div class="item-card-content">
+											  <div class="title">{{ item.name }}</div>
+											  <div class="price">{{ item.price | currency:'INR'}}</div>
+											  <div class="details">
+												<p><span>Breed:</span> {{ item.breed.name }}</p>
+												<p><span>Age:</span> {{ item.age }}</p>
+												<p><span>Gender:</span> {{ item.gender }}</p>
+												<!-- <p><span>Color:</span> {{ item.color }}</p> -->
+											  </div>
+											  <a class="button" href="javascript:;" (click)="openWhatsApp(item.listedBy.phone, 'Hello '+item.listedBy.name+', I am interested in buying the '+item.name+ ' with the following details: \n Breed: '+item.breed.name+', \n Age: '+item.age+', \n Could you provide more details about availability and pricing?')"><i class="bi bi-whatsapp"></i> WhatsApp Seller</a>
+											  <!-- <a class="button" href="javascript:;" (click)="openWhatsApp(item.listedBy.phone, 'Hello '+item.seller.name+', I am interested in buying the '+item.name+ ' with the following details: \n Breed: '+item.breed+', \n Age: '+item.age+', \n Color: '+item.color+'. \n Could you provide more details about availability and pricing?')"><i class="bi bi-whatsapp"></i> WhatsApp Seller</a> -->
+											</div>
+										</div>
+									</card-body>
+								</card>
+								<!-- END card -->
+							</div>
+						} @empty {
+							<div class="col-12">
+								<div class="text-center">No data found</div>
+							</div>
+						}
+
+						<div class="text-center" *ngIf="loadingMore()">
+							<div class="spinner-border text-theme" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+						</div>
+
+						<div infinite-scroll-placeholder>
+							<button class="btn btn-outline-theme w-100" (click)="onScrollDown()" *ngIf="totalPages > params.page && !loadingMore()">Load more</button>
+						</div>
+					</div>
+				</div>
+			</ng-scrollbar>
+		</div>
+		<!-- END pos-content -->
+		</card-body>
+		
+</card>
+<!-- END pos -->
+
+<!-- BEGIN pos-mobile-sidebar-toggler -->
+<!-- <a href="javascript:;" class="pos-mobile-sidebar-toggler" (click)="toggleMobileSidebar()">
+	<i class="bi bi-bag"></i>
+	<span class="badge">{{ getOrderTotal() }}</span>
+</a> -->
+<!-- END pos-mobile-sidebar-toggler -->
+
+<dialog id="dialog_confirm">
+	<div class="dialog">
+    <h2>Tips for a safe deal</h2>
+    <ul>
+        <li>Be safe, take necessary precautions while meeting with buyers and sellers</li>
+        <li>Do not enter UPI PIN while receiving money</li>
+        <li>Never give money or product in advance</li>
+        <li>Report suspicious users to PET LINE</li>
+    </ul>
+    <button type="button" data-bs-dismiss="dialog" (click)="toggleDialogConfirm()">CONTINUE TO OFFER</button>
+	</div>
+</dialog>

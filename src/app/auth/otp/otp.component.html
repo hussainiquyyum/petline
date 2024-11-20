@@ -1,0 +1,33 @@
+<!-- BEGIN login -->
+<div class="login">
+	<!-- BEGIN login-content -->
+	<div class="login-content">
+		<form [formGroup]="form" (ngSubmit)="verifyOTP()">
+			<h1 class="text-center">Login</h1>
+			<div class="text-inverse text-opacity-50 text-center mb-4">
+				Enter your OTP to login. 
+			</div>
+			<div class="text-inverse text-opacity-50 text-center mb-4">
+				Your secret code has journeyed to: {{maskedMobile}}
+			</div>
+			<div class="mb-3">
+				<label class="form-label">OTP <span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-lg bg-inverse bg-opacity-5" (ngModelChange)="verifyOTP($event)" formControlName="otp" name="otp" value="" placeholder="">
+			</div>
+			<button type="submit" class="btn btn-outline-theme btn-lg d-block w-100 fw-500 mb-3" [disabled]="isLoading">{{isLoading ? 'Loading...' : 'Verify OTP'}}</button>
+			<div class="text-center text-inverse text-opacity-50">
+				<ng-container *ngIf="!resendOTP">
+					Resend OTP in {{countdown}}
+				</ng-container>
+				<ng-container *ngIf="resendOTP">
+					<a class="btn btn-link" (click)="getOTP()">Resend OTP</a>
+				</ng-container>
+			</div>
+			<div class="text-center text-inverse text-opacity-50">
+				Change mobile number? <a class="btn btn-link" (click)="changeMobile()">click here</a>.
+			</div>
+		</form>
+	</div>
+	<!-- END login-content -->
+</div>
+<!-- END login -->

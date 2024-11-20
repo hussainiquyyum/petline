@@ -1,0 +1,16 @@
+<!-- BEGIN pos -->
+<div class="search-container">
+	<div class="input-group">
+		<i class="bi bi-search"></i>
+		<input type="text" placeholder="Search or ask a question">
+		<i class="bi bi-mic"></i>
+	</div>
+	<!-- <button class="btn border-0">
+		<i class="bi bi-view-list"></i>
+	</button> -->
+	<button class="btn border-0" (click)="openBottomSheet()">
+		<i class="bi bi-funnel"></i>
+	</button>
+</div>
+
+<app-filter-bottom-sheet [isOpen]="isBottomSheetOpen" (onClose)="isBottomSheetOpen = false"></app-filter-bottom-sheet>

@@ -1,0 +1,66 @@
+<!-- BEGIN register -->
+<div class="register">
+	<!-- BEGIN register-content -->
+	<div class="register-content">
+		<form (ngSubmit)="formSubmit()" [formGroup]="form">
+			<h1 class="text-center">Sign Up</h1>
+			<p class="text-inverse text-opacity-50 text-center">Experience the convenience of a single Pet Line ID to unlock all online ordering services.</p>
+			<div class="mb-3">
+				<label class="form-label">Name <span class="text-danger">*</span></label>
+				<input type="text" formControlName="name" class="form-control form-control-lg bg-inverse bg-opacity-5" placeholder="e.g John Smith" value="">
+				<div *ngIf="form.get('name')?.invalid && form.get('name')?.touched" class="text-danger">
+					Name is required.
+				</div>
+			</div>
+			<div class="mb-3">
+				<label class="form-label">Email Address</label>
+				<input type="text" formControlName="email" class="form-control form-control-lg bg-inverse bg-opacity-5" placeholder="username&#64;address.com" value="">
+				<div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="text-danger">
+					Valid email is required.
+				</div>
+			</div>
+			<div class="mb-3">
+				<label class="form-label">Mobile Number</label>
+				<input type="text" formControlName="mobile" class="form-control form-control-lg bg-inverse bg-opacity-5" placeholder="e.g 9X3X5X7X9X" (input)="onMobileInput($event)" value="">
+				<div *ngIf="form.get('mobile')?.invalid && form.get('mobile')?.touched" class="text-danger">
+					Valid mobile number is required.
+				</div>
+			</div>
+			<div class="mb-3">
+				<label class="form-label">Gender <span class="text-danger">*</span></label>
+				<select formControlName="gender" class="form-select form-select-lg bg-inverse bg-opacity-5">
+					<option value="male">Male</option>
+					<option value="female">Female</option>
+					<option value="other">Other</option>
+				</select>
+				<div *ngIf="form.get('gender')?.invalid && form.get('gender')?.touched" class="text-danger">
+					Gender is required.
+				</div>
+			</div>
+			<div class="mb-3">
+				<label class="form-label">Date of Birth</label>
+				<input class="form-control" placeholder="yyyy-mm-dd" name="datepicker_default" (click)="d.toggle()" formControlName="dob" ngbDatepicker #d="ngbDatepicker" autocomplete="off" />
+				<div *ngIf="form.get('dob')?.invalid && form.get('dob')?.touched" class="text-danger">
+					Date of Birth is required.
+				</div>
+			</div>
+			<div class="mb-3">
+				<div class="form-check">
+					<input formControlName="terms" class="form-check-input" type="checkbox" value="" id="customCheck1">
+					<label class="form-check-label" for="customCheck1">I have read and agree to the <a href="javascript:;">Terms of Use</a> and <a href="javascript:;">Privacy Policy</a>.</label>
+				</div>
+				<div *ngIf="form.get('terms')?.invalid && form.get('terms')?.touched" class="text-danger">
+					You must agree to the terms.
+				</div>
+			</div>
+			<div class="mb-3">
+				<button type="submit" class="btn btn-outline-theme btn-lg d-block w-100" [disabled]="form.invalid">Sign Up</button>
+			</div>
+			<div class="text-inverse text-opacity-50 text-center">
+				Already have an ID? <a routerLink="/login">Sign In</a>
+			</div>
+		</form>
+	</div>
+	<!-- END register-content -->
+</div>
+<!-- END register -->

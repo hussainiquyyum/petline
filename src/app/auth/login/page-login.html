@@ -1,0 +1,39 @@
+<!-- BEGIN login -->
+<div class="login">
+	<!-- BEGIN login-content -->
+	<div class="login-content">
+		<form *ngIf="!isOtpSent" (ngSubmit)="getOTP()">
+			<h1 class="text-center">Get OTP</h1>
+			<div class="text-inverse text-opacity-50 text-center mb-4">
+				Enter your mobile number to get OTP.
+			</div>
+			<div class="mb-3">
+				<label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-lg bg-inverse bg-opacity-5" [(ngModel)]="mobile" name="mobile" value="" placeholder="">
+			</div>
+			<button type="submit" class="btn btn-outline-theme btn-lg d-block w-100 fw-500 mb-3" [disabled]="isLoading">{{isLoading ? 'Loading...' : 'Get OTP'}}</button>
+			<div class="text-center text-inverse text-opacity-50">
+				Don't have an account yet? <a routerLink="/register">Sign up</a>.
+			</div>
+		</form>
+		<form *ngIf="isOtpSent" [formGroup]="form" (ngSubmit)="verifyOTP()">
+			<h1 class="text-center">Login</h1>
+			<div class="text-inverse text-opacity-50 text-center mb-4">
+				Enter your OTP to login. 
+			</div>
+			<div class="text-inverse text-opacity-50 text-center mb-4">
+				Your secret code has journeyed to: {{maskedMobile}}
+			</div>
+			<div class="mb-3">
+				<label class="form-label">OTP <span class="text-danger">*</span></label>
+				<input type="text" class="form-control form-control-lg bg-inverse bg-opacity-5" (ngModelChange)="verifyOTP($event)" formControlName="otp" name="otp" value="" placeholder="">
+			</div>
+			<button type="submit" class="btn btn-outline-theme btn-lg d-block w-100 fw-500 mb-3" [disabled]="isLoading">{{isLoading ? 'Loading...' : 'Verify OTP'}}</button>
+			<div class="text-center text-inverse text-opacity-50">
+				Change mobile number? <a class="btn btn-link" (click)="changeMobile()">click here</a>.
+			</div>
+		</form>
+	</div>
+	<!-- END login-content -->
+</div>
+<!-- END login -->

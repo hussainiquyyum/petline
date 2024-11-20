@@ -1,0 +1,48 @@
+@import '~quill/dist/quill.snow.css';
+$button-color: #1c1c1e;
+$button-radius: 2px;
+
+.progress-container {
+  width: 100%;
+  position: relative;
+}
+.progress {
+  height: 48px !important;
+  width: 100% !important;
+  font-size: 1rem;
+  background: transparent;
+  position: absolute;
+  bottom: 0;
+  border-radius: 0px;
+  left: 0;
+  z-index: 100;
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    background-color: $button-color;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border-radius: $button-radius;
+    margin-top: 0px;
+    cursor: pointer;
+
+  &:hover {
+    background-color: #0e0f0f;
+  }
+  &:focus, &:active, &:hover, &:disabled {
+    border: 1px solid #0e0f0f !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    color: #0e0f0f !important;
+    background-color: #fff !important;
+  }
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

@@ -1,0 +1,19 @@
+<card class="pos nav-card" id="pos" [ngClass]="{ 'pos-mobile-sidebar-toggled': mobileSidebarToggled }">
+	<card-body class="pos-container d-lg-flex">
+        <div class="pos-menu">
+            <div class="nav-container">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item" *ngFor="let navBtn of navBtn(); let i = index">
+                        <a class="nav-link {{navBtn.active?'selected-tab':''}}" (click)="navClick(i)" [ngClass]="{'active': navBtn.active }">
+                            <card>
+                                <card-body>
+                                    <i [ngClass]="navBtn.icon + (navBtn.active ? '-fill' : '')"></i> <br> {{ navBtn.name }}
+                                </card-body>
+                            </card>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </card-body>
+</card>
