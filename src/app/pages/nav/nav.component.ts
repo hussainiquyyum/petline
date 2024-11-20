@@ -5,9 +5,10 @@ import { AuthService } from '../../service/auth.service';
 import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-nav',
-  templateUrl: './nav.component.html',
-  styleUrl: './nav.component.scss'
+    selector: 'app-nav',
+    templateUrl: './nav.component.html',
+    styleUrl: './nav.component.scss',
+    standalone: false
 })
 export class NavComponent {
   private authService = inject(AuthService);

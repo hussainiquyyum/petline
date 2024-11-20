@@ -3,68 +3,75 @@ import { Component, ElementRef, HostListener, AfterViewInit } from '@angular/cor
 declare var bootstrap: any;
 
 @Component({
-  selector: 'card',
-  templateUrl: './card.component.html',
-  host: {
-  	'class': 'card'
-  }
+    selector: 'card',
+    templateUrl: './card.component.html',
+    host: {
+        'class': 'card'
+    },
+    standalone: false
 })
 export class CardComponent { }
 
 
 @Component({
-  selector: 'card-header',
-  template: '<ng-content></ng-content>',
-  host: {
-  	'class': 'card-header d-block'
-  }
+    selector: 'card-header',
+    template: '<ng-content></ng-content>',
+    host: {
+        'class': 'card-header d-block'
+    },
+    standalone: false
 })
 export class CardHeaderComponent { }
 
 
 @Component({
-  selector: 'card-body',
-  template: '<ng-content></ng-content>',
-  host: {
-  	'class': 'card-body d-block'
-  }
+    selector: 'card-body',
+    template: '<ng-content></ng-content>',
+    host: {
+        'class': 'card-body d-block'
+    },
+    standalone: false
 })
 export class CardBodyComponent { }
 
 
 @Component({
-  selector: 'card-footer',
-  template: '<ng-content></ng-content>',
-  host: {
-  	'class': 'card-footer d-block'
-  }
+    selector: 'card-footer',
+    template: '<ng-content></ng-content>',
+    host: {
+        'class': 'card-footer d-block'
+    },
+    standalone: false
 })
 export class CardFooterComponent { }
 
 
 @Component({
-  selector: 'card-img-overlay',
-  template: '<ng-content></ng-content>',
-  host: {
-  	'class': 'card-img-overlay'
-  }
+    selector: 'card-img-overlay',
+    template: '<ng-content></ng-content>',
+    host: {
+        'class': 'card-img-overlay'
+    },
+    standalone: false
 })
 export class CardImgOverlayComponent { }
 
 
 @Component({
-  selector: 'card-group',
-  template: '<ng-content></ng-content>',
-  host: {
-  	'class': 'card-group'
-  }
+    selector: 'card-group',
+    template: '<ng-content></ng-content>',
+    host: {
+        'class': 'card-group'
+    },
+    standalone: false
 })
 export class CardGroupComponent { }
 
 
 @Component({
-  selector: 'card-expand-toggler',
-  template: '<ng-content></ng-content>'
+    selector: 'card-expand-toggler',
+    template: '<ng-content></ng-content>',
+    standalone: false
 })
 export class CardExpandTogglerComponent implements AfterViewInit {
 	@HostListener('click', ['$event'])

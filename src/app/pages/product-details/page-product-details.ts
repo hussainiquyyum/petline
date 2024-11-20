@@ -11,10 +11,11 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'page-product-details',
-  templateUrl: './page-product-details.html',
-  styleUrls: [ './page-product-details.scss' ],
-  encapsulation: ViewEncapsulation.None
+    selector: 'page-product-details',
+    templateUrl: './page-product-details.html',
+    styleUrls: ['./page-product-details.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 
 export class ProductDetailsPage implements OnInit, OnDestroy {

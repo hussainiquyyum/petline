@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { AppSettings } from '../../../service/app-settings.service';
 
 @Component({
-  selector: 'page-error',
-  templateUrl: './page-error.html'
+    selector: 'page-error',
+    templateUrl: './page-error.html',
+    standalone: false
 })
 
 export class ErrorPage {

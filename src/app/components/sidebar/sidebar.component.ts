@@ -3,11 +3,12 @@ import { AppMenuService } from '../../service/app-menus.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 @Component({
-  selector: 'sidebar',
-  templateUrl: './sidebar.component.html',
-  host: {
-  	class: 'app-sidebar'
-  }
+    selector: 'sidebar',
+    templateUrl: './sidebar.component.html',
+    host: {
+        class: 'app-sidebar'
+    },
+    standalone: false
 })
 
 export class SidebarComponent implements OnInit {

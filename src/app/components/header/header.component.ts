@@ -11,11 +11,12 @@ interface NotificationData {
 }
 
 @Component({
-  selector: 'header',
-  templateUrl: './header.component.html',
-  host: {
-  	class: 'app-header'
-  }
+    selector: 'header',
+    templateUrl: './header.component.html',
+    host: {
+        class: 'app-header'
+    },
+    standalone: false
 })
 export class HeaderComponent {
 	public notificationData : NotificationData[] = [];

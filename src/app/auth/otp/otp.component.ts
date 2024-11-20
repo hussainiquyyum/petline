@@ -7,8 +7,9 @@ import { AuthService } from '../../service/auth.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-otp',
-  templateUrl: './otp.component.html',
+    selector: 'app-otp',
+    templateUrl: './otp.component.html',
+    standalone: false
 })
 export class OtpComponent implements OnInit, OnDestroy, AfterViewInit {
   private authService = inject(AuthService);

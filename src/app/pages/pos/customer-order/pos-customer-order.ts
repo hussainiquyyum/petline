@@ -27,8 +27,9 @@ interface DataResponse {
 }
 
 @Component({
-  selector: 'pos-customer-order',
-  templateUrl: './pos-customer-order.html'
+    selector: 'pos-customer-order',
+    templateUrl: './pos-customer-order.html',
+    standalone: false
 })
 
 export class PosCustomerOrderPage {

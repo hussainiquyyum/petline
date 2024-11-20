@@ -5,11 +5,12 @@ import { AppSettings } from '../../service/app-settings.service';
 declare var bootstrap: any;
 
 @Component({
-  selector: 'theme-panel',
-  templateUrl: './theme-panel.component.html',
-  host: {
-  	'class': 'app-theme-panel'
-  }
+    selector: 'theme-panel',
+    templateUrl: './theme-panel.component.html',
+    host: {
+        'class': 'app-theme-panel'
+    },
+    standalone: false
 })
 
 export class ThemePanelComponent implements AfterViewInit {

@@ -3,9 +3,10 @@ import { AuthService } from '../../../service/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'hitpos-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+    selector: 'hitpos-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.css'],
+    standalone: false
 })
 export class POSHeaderComponent implements OnInit {
   @Output() onAddMenu: EventEmitter<boolean> = new EventEmitter<boolean>();

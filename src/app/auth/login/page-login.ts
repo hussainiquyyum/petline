@@ -7,8 +7,9 @@ import { Subject, takeUntil } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'page-login',
-  templateUrl: './page-login.html'
+    selector: 'page-login',
+    templateUrl: './page-login.html',
+    standalone: false
 })
 
 export class LoginPage implements OnDestroy, AfterViewInit {
