@@ -29,9 +29,12 @@
     
     <!-- <theme-panel></theme-panel> -->
   </div>
-  <app-nav *ngIf="isLoggedIn()"></app-nav>
+  <app-nav *ngIf="!isLoginPage()"></app-nav>
 </div>
 <!-- END #app -->
 <div class="landscape-warning">
   <img src="assets/img/8.webp" alt="Please use a portrait orientation to view this app.">
+</div>
+<div *ngIf="showInstallButton">
+  <button (click)="installPWA()">Install App</button>
 </div>

@@ -14,6 +14,7 @@ export class PetsService {
   private isUploading = signal(false);
   public uploadStatusUrl: string = `${API_URL}/upload-status`;
   public filtersSearch: Subject<any> = new Subject<any>();
+  public isBottomSheetOpen = signal(false);
 
   constructor(private http: HttpClient) { }
 

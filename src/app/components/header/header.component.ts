@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, Renderer2, OnDestroy, inject, signal } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Renderer2, OnDestroy, inject, signal, computed } from '@angular/core';
 import { AppSettings } from '../../service/app-settings.service';
 import { PetsService } from '../../service/pets.service';
 
@@ -23,6 +23,7 @@ export class HeaderComponent {
 	private _petsService = inject(PetsService);
 	public filters: string[] = [];
 	public isBottomSheetOpen:boolean = false;
+	public isBottomSheetOpenSignal = computed(() => this._petsService.isBottomSheetOpen());
 	
 	/*
 	notificationData = [{
@@ -36,6 +37,7 @@ export class HeaderComponent {
 		this._petsService.filtersSearch.subscribe((filters: any) => {
 			this.filters = filters;
 		});
+		
 	}
 	
 	handleToggleSidebarCollapsed(event: MouseEvent) {
@@ -55,7 +57,7 @@ export class HeaderComponent {
 	}
 
 	openBottomSheet(): void {
-		this.isBottomSheetOpen = !this.isBottomSheetOpen;
+		this._petsService.isBottomSheetOpen.set(!this._petsService.isBottomSheetOpen());
 	}
 	
 	handleToggleMobileSidebar(event: MouseEvent) {

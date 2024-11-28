@@ -21,10 +21,10 @@ const routes: Routes = [
   { path: 'register', component: RegisterPage, data: { title: 'Register'} },
   { path: 'otp', component: OtpComponent, data: { title: 'OTP'} },
   { path: 'add-new', component: ProductDetailsPage, data: { title: 'Add New'}, canActivate: [AuthGuard] },
-  { path: 'home', component: PosCustomerOrderPage, data: { title: 'Customer Order'}, canActivate: [AuthGuard] },
+  { path: 'home', component: PosCustomerOrderPage, data: { title: 'Customer Order'} },
   { path: 'cart', component: CartComponent, data: { title: 'Cart'}, canActivate: [AuthGuard] },
   { path: 'settings', component: SettingsPage, data: { title: 'Settings'}, canActivate: [AuthGuard] },
-  { path: '**', pathMatch: 'full', component: ErrorPage, data: { title: 'Error Page'} }
+  { path: '**', pathMatch: 'full', redirectTo: '/login' }
 ];
 
 @NgModule({

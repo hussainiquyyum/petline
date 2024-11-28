@@ -16,13 +16,15 @@ export class AuthService {
   public checkLogin = signal(false);
 
   constructor() {
-    interval(14 * 60 * 1000).subscribe(() => this.refreshAccessToken().subscribe());
+    this.isLoggedIn();
   }
 
   isLoggedIn(): boolean {
     const token = localStorage.getItem('accessToken') ? true : false;
-    console.log(token);
-    console.log(localStorage.getItem('accessToken'));
+    if (token) {
+      // this.router.navigate(['/home']);
+      interval(14 * 60 * 1000).subscribe(() => this.refreshAccessToken().subscribe());
+    }
     this.checkLogin.set(token);
     return token;
   }
@@ -73,6 +75,7 @@ export class AuthService {
         this.accessToken.next(null);
         localStorage.removeItem('accessToken');
         this.router.navigate(['/login']);
+        this.isLoggedIn();
       })
     );
   }

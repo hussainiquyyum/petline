@@ -43,6 +43,7 @@
     "@ng-select/ng-select": "^13.5.0",
     "@ngx-loading-bar/core": "^6.0.2",
     "@ngx-loading-bar/router": "^6.0.2",
+    "@sentry/angular": "^8.40.0",
     "@types/datatables.net": "^1.10.28",
     "@types/jasmine": "~5.1.4",
     "@types/jasminewd2": "~2.0.13",

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Router }    from '@angular/router';
 import { FormBuilder, FormGroup, NgForm, Validators }    from '@angular/forms';
 import { AppSettings } from '../../service/app-settings.service';
@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
     standalone: false
 })
 
-export class LoginPage implements OnDestroy, AfterViewInit {
+export class LoginPage implements OnInit, OnDestroy, AfterViewInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private appSettings = inject(AppSettings);
@@ -51,6 +51,14 @@ export class LoginPage implements OnDestroy, AfterViewInit {
     this.appSettings.appSidebarNone = true;
     this.appSettings.appHeaderNone = true;
     this.appSettings.appContentClass = 'p-0';
+  }
+
+  ngOnInit() {
+    this.authService.getAccessToken().subscribe((res) => {
+      if (res) {
+        this.router.navigate(['/']);
+      }
+    });
   }
   
   ngOnDestroy() {
@@ -125,8 +133,6 @@ export class LoginPage implements OnDestroy, AfterViewInit {
   // }
   verifyOTP(event?: any) {
     this.otp = event??this.otp;
-    console.log('verifyOTP', event);
-    console.log('verifyOTP', this.otp);
     if(this.otp.length !== 6) return;
     this.authService.customerLogin(this.mobile, this.otp).subscribe({
       next: (res) => {

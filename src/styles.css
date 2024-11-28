@@ -1,18 +1,74 @@
 /* You can add global styles to this file, and also import other style files */
-@import '@fortawesome/fontawesome-free/css/all.css';
-@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import "@fortawesome/fontawesome-free/css/all.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
 
 .loader {
-    position: absolute !important;
-    width: 100%;
-    height: 100%;
-    font-size: 10rem;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: absolute !important;
+  width: 100%;
+  height: 100%;
+  font-size: 10rem;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.brand-name {
+  font-family: "OfficinaSans-Bold", sans-serif;
+  font-size: 2.5rem;
+  color: #193149;
+  margin: 0;
+  letter-spacing: 2px;
+}
+
+/* .brand-logo {
+  width: 100px;
+} */
+
+@keyframes slideLogo {
+  0% {
+    transform: translateX(-100px);
+  }
+  50% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes showBrandName {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateX(25px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.brand-logo {
+  animation: slideLogo 1s ease-out forwards;
+}
+
+.brand-name {
+  opacity: 0;
+  animation: showBrandName 1s ease-out 0.3s forwards;
 }

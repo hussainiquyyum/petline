@@ -2,7 +2,7 @@
 import { Router, NavigationEnd, ActivatedRoute }   from '@angular/router';
 import { CommonModule, JsonPipe }                  from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule }                        from '@angular/common/http';
-import { NgModule, isDevMode }                                from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, NgModule, isDevMode }                                from '@angular/core';
 import { FormsModule, ReactiveFormsModule }        from '@angular/forms';
 import { BrowserModule, Title }                    from '@angular/platform-browser';
 import { BrowserAnimationsModule }                 from '@angular/platform-browser/animations';
@@ -67,6 +67,41 @@ import { ImageSrcPipe } from './shared/pipe/image-src.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FilterBottomSheetComponent } from './filter-bottom-sheet/filter-bottom-sheet.component';
+import * as Sentry from '@sentry/angular';
+import { environment } from '../environments/environment';
+
+Sentry.init({
+  dsn: "https://cd12303fc780ad9d9257719d48da8288@o4508347076444160.ingest.de.sentry.io/4508347079065680",
+  integrations: [
+    // Registers and configures the Tracing integration,
+    // which automatically instruments your application to monitor its
+    // performance, including custom Angular routing instrumentation
+    Sentry.browserTracingIntegration(),
+    // Registers the Replay integration,
+    // which automatically captures Session Replays
+    Sentry.replayIntegration(),
+  ],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for tracing.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+
+  // Set `tracePropagationTargets` to control for which URLs trace propagation should be enabled
+  tracePropagationTargets: [
+    environment.frontendUrl,
+  ],
+  // Capture Replay for 10% of all sessions,
+  // plus for 100% of sessions with an error
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+});
+
+export class SentryErrorHandler implements ErrorHandler {
+  handleError(err:any) : void {
+    Sentry.captureException(err.originalError || err);
+  }
+}
 
 @NgModule({
   declarations: [
@@ -154,19 +189,34 @@ import { FilterBottomSheetComponent } from './filter-bottom-sheet/filter-bottom-
       useClass: AuthInterceptor,
       multi: true
     },
+    { provide: ErrorHandler, useClass: SentryErrorHandler },
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler(),
+    },
+    {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {},
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
     // { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
 	],
   bootstrap: [ AppComponent ]
 })
 
 export class AppModule {
-	title: string = 'Pet Line';
+	title: string = 'Homie Pet';
 	
   constructor(private router: Router, private titleService: Title, private route: ActivatedRoute) {
     router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
       	if (this.route.snapshot.firstChild && this.route.snapshot.firstChild.data['title']) {
-      		this.title = 'Pet Line | '+ this.route.snapshot.firstChild.data['title'];
+      		this.title = 'Homie Pet | '+ this.route.snapshot.firstChild.data['title'];
       	}
         this.titleService.setTitle(this.title);
         

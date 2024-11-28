@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse
 } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
+  private router = inject(Router);
+  private readonly homePath = '/home';
   constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -29,7 +32,9 @@ export class TokenInterceptor implements HttpInterceptor {
                 }),
                 catchError(refreshError => {
                   // If refreshing also fails, log the user out
-                  this.authService.logout().subscribe();
+                  if (!this.router.url.includes(this.homePath)) {
+                    this.authService.logout().subscribe();
+                  }
                   return throwError(refreshError);
                 })
               );

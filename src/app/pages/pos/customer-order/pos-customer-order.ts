@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppSettings } from '../../../service/app-settings.service';
 import { MenuService } from '../../../service/menu.service';
@@ -15,6 +15,7 @@ import { PetsService } from '../../../service/pets.service';
 import { environment } from '../../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Breed } from '../../../interface/pets.interface';
+import { AuthService } from '../../../service/auth.service';
 
 declare var bootstrap: any;
 let TEMP_WHATSAPP_URL = '';
@@ -32,7 +33,7 @@ interface DataResponse {
     standalone: false
 })
 
-export class PosCustomerOrderPage {
+export class PosCustomerOrderPage implements OnInit, OnDestroy {
 	listType = signal<'long' | 'list'>('long');
 	menu: any = {};
 	order: Order = {
@@ -59,6 +60,7 @@ export class PosCustomerOrderPage {
 	modalSelectedAddon: any = [];
 	mobileSidebarToggled: boolean = false;
 	private _menuService = inject(MenuService);
+	private _authService = inject(AuthService);
 	private _ordersService = inject(OrdersService);
 	private _modalService = inject(NgbModal);
 	private _socketService = inject(SocketService);
@@ -84,47 +86,12 @@ export class PosCustomerOrderPage {
 	loadingMore = signal(false);
 	filters: any;
 	isLoading = signal(false);
+	public isBottomSheetOpen:boolean = false;
 
 	private destroyRef = inject(DestroyRef);
 	animals: any;
 	breeds: Breed[] = [];
-// 	[
-//     {
-//       "id": 1,
-//       "name": "Fluffy",
-//       "age": "2 years",
-//       "gender": "Male",
-//       "color": "Brown Tabby",
-//       "price": 1200,
-//       "image": "assets/img/product/cat1.jpeg",
-// 	  "breed": "Maine Coon",
-//       "description": "Friendly and playful Maine Coon, great with kids.",
-// 	  "isAvailable": true,
-//       "seller": {
-//         "name": "John Doe",
-//         "contact_number": "+919849936357",
-//         "location": "New York, NY"
-//       }
-//     },
-//     {
-//       "id": 2,
-//       "name": "Whiskers",
-//       "age": "1 year",
-//       "gender": "Female",
-//       "color": "Silver",
-//       "price": 1500,
-//       "image": "assets/img/product/cat1.jpeg",
-// 	  "breed": "Maine Coon",
-//       "description": "Beautiful silver Maine Coon, loves to cuddle.",
-// 	  "isAvailable": true,
-//       "seller": {
-//         "name": "Jane Smith",
-//         "contact_number": "+919849936357",
-//         "location": "Los Angeles, CA"
-//       }
-//     }
-//   ]
-	
+	isLoggedIn = signal(false);
 	constructor(private appSettings: AppSettings, private http: HttpClient) {
 		this.appSettings.appHeaderNone = false;
 		this.appSettings.appSidebarNone = true;
@@ -188,6 +155,7 @@ export class PosCustomerOrderPage {
 		// this._route.queryParams.subscribe((params: any) => {
 		// 	this.params = params;
 		// });
+		this.isLoggedIn = this._authService.checkLogin;
 		this._getPets();
 		this._getFilters();
 		this._getAllAnimalAndBreed();
@@ -221,6 +189,10 @@ export class PosCustomerOrderPage {
 		this.params.page = 1;
 		this.filters = null;
 		this._petsService.filtersSearch.next(this.filters);
+	}
+
+	openBottomSheet(): void {
+		this._petsService.isBottomSheetOpen.set(!this._petsService.isBottomSheetOpen());
 	}
 
 	private _getFilters() {

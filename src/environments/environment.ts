@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
+  frontendUrl: 'http://localhost:4200',
   socketUrl: 'http://localhost:3000',
   apiUrl: 'http://localhost:3000/api',
   uploadUrl: 'http://localhost:3000'
