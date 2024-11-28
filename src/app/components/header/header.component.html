@@ -1,16 +1,15 @@
 <!-- BEGIN pos -->
 <div class="search-container">
-	<div class="input-group">
-		<i class="bi bi-search"></i>
-		<input type="text" placeholder="Search or ask a question">
-		<i class="bi bi-mic"></i>
+	<div class="brand-container">
+		<img src="/assets/img/logo.png" alt="Homie Pet" class="brand-logo" />
+		<!-- <h1 class="brand-name">Homie Pet</h1> -->
 	</div>
 	<!-- <button class="btn border-0">
 		<i class="bi bi-view-list"></i>
 	</button> -->
-	<button class="btn border-0" (click)="openBottomSheet()">
-		<i class="bi bi-funnel"></i>
-	</button>
 </div>
+<!-- <button class="pos-filter-button btn border-0" (click)="openBottomSheet()">
+	<i class="bi bi-funnel"></i>
+</button> -->
 
-<app-filter-bottom-sheet [isOpen]="isBottomSheetOpen" (onClose)="isBottomSheetOpen = false"></app-filter-bottom-sheet>
+<app-filter-bottom-sheet [isOpen]="isBottomSheetOpenSignal()" (onClose)="openBottomSheet()"></app-filter-bottom-sheet>

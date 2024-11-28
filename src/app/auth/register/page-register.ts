@@ -5,8 +5,9 @@ import { AppSettings } from '../../service/app-settings.service';
 import { AuthService } from '../../service/auth.service';
 
 @Component({
-  selector: 'page-register',
-  templateUrl: './page-register.html'
+    selector: 'page-register',
+    templateUrl: './page-register.html',
+    standalone: false
 })
 
 export class RegisterPage {

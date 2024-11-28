@@ -3,6 +3,8 @@ import { UserService } from '../../service/user.service';
 import { User } from '../../interface/user.interface';
 import { finalize, Observable, Subject, takeUntil } from 'rxjs';
 import { PetsService } from '../../service/pets.service';
+import { AuthService } from '../../service/auth.service';
+import Swal from 'sweetalert2';
 
 function takeUntilDestroyed(destroyRef: DestroyRef): <T>(source: Observable<T>) => Observable<T> {
   const destroy$ = new Subject<void>();
@@ -12,11 +14,13 @@ function takeUntilDestroyed(destroyRef: DestroyRef): <T>(source: Observable<T>) 
 }
 
 @Component({
-  selector: 'settings',
-  templateUrl: './settings.html'
+    selector: 'settings',
+    templateUrl: './settings.html',
+    standalone: false
 })
 
 export class SettingsPage implements OnInit  {
+  private authService = inject(AuthService);
   private userService = inject(UserService);
   private destroyRef = inject(DestroyRef);
   private petService = inject(PetsService);
@@ -27,7 +31,8 @@ export class SettingsPage implements OnInit  {
   public gettingPets = signal(false);
   public nameEditing = signal(false);
   public nameEditingLoading = signal(false);
-
+  public loggingOut = signal(false);
+  
   constructor() {
     
   }
@@ -60,6 +65,22 @@ export class SettingsPage implements OnInit  {
     ).subscribe((res: any) => {
       this.userInfo = res;
       this.nameEditing.set(false);
+    });
+  }
+
+  logout() {
+    this.loggingOut.set(true);
+    this.authService.logout().pipe(
+      finalize(() => this.loggingOut.set(false)),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      error: (error: any) => {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Logout failed',
+          text: 'Something went wrong!',
+        });
+      }
     });
   }
 

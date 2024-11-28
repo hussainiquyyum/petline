@@ -1,7 +1,7 @@
 $button-color: #297739;
 $button-radius: 2px;
 .search-container {
-	padding: 10px 0;
+	padding: 4px 0;
 	display: flex;
     align-items: center;
     justify-content: space-between;
@@ -51,6 +51,7 @@ $button-radius: 2px;
 		padding: .4rem;
 		border-radius: 1rem;
 		margin-left: .6rem;
+		display: flex;
 	}
 	.badge-text {
 		font-size: 1rem;
@@ -67,7 +68,7 @@ $button-radius: 2px;
 
 .pos {
 	background: var(--app-pos-bg);
-	height: calc(100vh - 214px);
+	height: calc(100vh - 160px);
 		
 	& .pos-container {
 		height: 100%;
@@ -1182,7 +1183,7 @@ $button-radius: 2px;
   
 	  p {
 		margin: 4px 0;
-		font-size: 14px;
+		font-size: 18px;
 	  }
   
 	  span {
@@ -1266,7 +1267,7 @@ $button-radius: 2px;
 
     p {
       margin: 4px 0;
-      font-size: 14px; /* Slightly larger for mobile */
+      font-size: 18px; /* Slightly larger for mobile */
     }
 
     span {
@@ -1373,4 +1374,11 @@ $button-radius: 2px;
 	border-radius: 5px;
 	font-size: 1em;
 	cursor: pointer;
+}
+
+.pos-filter-button {
+	position: absolute;
+    right: 0;
+    top: 8px;
+    font-size: 28px;
 }

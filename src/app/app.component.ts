@@ -1,4 +1,4 @@
-import { Component, EventEmitter, ChangeDetectorRef, inject, computed } from '@angular/core';
+import { Component, EventEmitter, ChangeDetectorRef, inject, computed, HostListener, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular/router';
 import { AppSettings } from './service/app-settings.service';
@@ -6,22 +6,33 @@ import * as PullToRefresh from 'pulltorefreshjs';
 import { AuthService } from './service/auth.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+    standalone: false
 })
 
 export class AppComponent {
 	private authService = inject(AuthService);
+	private router = inject(Router);
 	appEvent = new EventEmitter<string>();
 	appLoaded: boolean = false;
-	isLoggedIn = computed(() => this.authService.checkLogin());
+	isLoggedIn = signal(false);
+	isLoginPage = signal(false);
+	deferredPrompt: any;
+	showInstallButton = false;
 	
 	constructor(public appSettings: AppSettings, private cdr: ChangeDetectorRef) { 
 		// const savedToken = localStorage.getItem('accessToken');
 		// if (savedToken) {
 		// 	this.authService.customerLogin(savedToken).subscribe();
 		// }
+		this.isLoggedIn.set(this.authService.checkLogin());
+		this.router.events.subscribe((event) => {
+			if (event instanceof NavigationEnd) {
+				this.isLoginPage.set(this.router.url.includes('/login') || this.router.url.includes('/register') || this.router.url.includes('/otp'));
+			}
+		});
 	}
 	
 	handleSetCover(coverClass: string) {
@@ -54,17 +65,17 @@ export class AppComponent {
 	}
 	
 	ngOnInit() {
-		console.log(this.isLoggedIn);
+		console.log(this.isLoggedIn());
 		console.log(this.authService.checkLogin());
-		PullToRefresh.init({
-			mainElement: '#app', // Specify the element to attach the pull-to-refresh
-			iconRefreshing: 'U+1F431 fa-spin',
-			iconArrow: 'fa fa-arrow-up',
-			distThreshold: 50,
-			onRefresh() {
-			  window.location.reload(); // Reload the page
-			}
-		});
+		// PullToRefresh.init({
+		// 	mainElement: '#app', // Specify the element to attach the pull-to-refresh
+		// 	iconRefreshing: 'U+1F431 fa-spin',
+		// 	iconArrow: 'fa fa-arrow-up',
+		// 	distThreshold: 50,
+		// 	onRefresh() {
+		// 	  window.location.reload(); // Reload the page
+		// 	}
+		// });
 		
 		var elm = document.body;
 		if (elm) {
@@ -102,5 +113,37 @@ export class AppComponent {
 	ngAfterViewInit() {
 		this.appLoaded = true;
 		this.cdr.detectChanges();
+	}
+
+	@HostListener('window:beforeinstallprompt', ['$event'])
+	onBeforeInstallPrompt(event: Event) {
+		// Prevent the mini-infobar from appearing on mobile
+		event.preventDefault();
+		// Stash the event so it can be triggered later.
+		this.deferredPrompt = event;
+		// Update UI to notify the user they can install the PWA
+		this.showInstallButton = true;
+	}
+
+	installPWA() {
+		// Hide the install button
+		this.showInstallButton = false;
+		// Show the install prompt
+		this.deferredPrompt.prompt();
+		// Wait for the user to respond to the prompt
+		this.deferredPrompt.userChoice.then((choiceResult: any) => {
+			if (choiceResult.outcome === 'accepted') {
+				console.log('User accepted the A2HS prompt');
+			} else {
+				console.log('User dismissed the A2HS prompt');
+			}
+			this.deferredPrompt = null;
+		});
+	}
+
+	@HostListener('window:appinstalled', ['$event'])
+	onAppInstalled(event: Event) {
+		console.log('PWA was installed');
+		// You can perform additional actions here if needed
 	}
 }

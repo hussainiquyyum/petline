@@ -3,14 +3,15 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { NgOtpInputComponent } from 'ng-otp-input';
 
 @Directive({
-  selector: 'ng-otp-input',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NgOtpInputValueAccessorDirective),
-      multi: true
-    }
-  ]
+    selector: 'ng-otp-input',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => NgOtpInputValueAccessorDirective),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class NgOtpInputValueAccessorDirective implements ControlValueAccessor {
   constructor(private host: NgOtpInputComponent) {}

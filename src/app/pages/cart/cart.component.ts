@@ -2,9 +2,10 @@ import { Component, inject } from '@angular/core';
 import { AppSettings } from '../../service/app-settings.service';
 
 @Component({
-  selector: 'app-cart',
-  templateUrl: './cart.component.html',
-  styleUrl: './cart.component.scss'
+    selector: 'app-cart',
+    templateUrl: './cart.component.html',
+    styleUrl: './cart.component.scss',
+    standalone: false
 })
 export class CartComponent {
   private appSettings = inject(AppSettings);

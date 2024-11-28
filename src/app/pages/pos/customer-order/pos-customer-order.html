@@ -13,13 +13,16 @@
 	</button>
 </div> -->
 <app-loader [isLoading]="isLoading"></app-loader>
-<card class="filter-container" *ngIf="filters">
+<!-- <card class="filter-container" >
 	<card-body class="d-flex">
-		<span class="badge bg-dark" (click)="clearFilter()"> <span class="badge-text">Clear All <i class="bi bi-x"></i></span></span>
-		<span class="badge bg-dark" *ngIf="filters.animalTypes"> <span class="badge-text">Animal Type: {{filters.animalTypes}} </span></span>
-		<span class="badge bg-dark" *ngIf="filters.selectedBreed"> <span class="badge-text">Breed: {{getBreedName(filters.selectedBreed)}} </span></span>
+		<button class="btn border-0" (click)="openBottomSheet()">
+			<i class="bi bi-funnel"></i>
+		</button>
+		<span class="badge bg-dark" *ngIf="filters" (click)="clearFilter()"> <span class="badge-text">Clear All <i class="bi bi-x"></i></span></span>
+		<span class="badge bg-dark" *ngIf="filters?.animalTypes"> <span class="badge-text">Animal Type: {{filters?.animalTypes}} </span></span>
+		<span class="badge bg-dark" *ngIf="filters?.selectedBreed"> <span class="badge-text">Breed: {{getBreedName(filters?.selectedBreed)}} </span></span>
 	</card-body>
-</card>
+</card> -->
 
 
 
@@ -53,14 +56,16 @@
 											}
 											<div class="item-card-content">
 											  <div class="title">{{ item.name }}</div>
-											  <div class="price">{{ item.price | currency:'INR'}}</div>
+											  <div class="price" *ngIf="isLoggedIn()">{{ item.price | currency:'INR'}}</div>
+											  <div class="price" *ngIf="!isLoggedIn()">₹ XXXXX</div>
 											  <div class="details">
 												<p><span>Breed:</span> {{ item.breed.name }}</p>
 												<p><span>Age:</span> {{ item.age }}</p>
 												<p><span>Gender:</span> {{ item.gender }}</p>
 												<!-- <p><span>Color:</span> {{ item.color }}</p> -->
 											  </div>
-											  <a class="button" href="javascript:;" (click)="openWhatsApp(item.listedBy.phone, 'Hello '+item.listedBy.name+', I am interested in buying the '+item.name+ ' with the following details: \n Breed: '+item.breed.name+', \n Age: '+item.age+', \n Could you provide more details about availability and pricing?')"><i class="bi bi-whatsapp"></i> WhatsApp Seller</a>
+											  <a class="button" href="javascript:;" *ngIf="isLoggedIn()" (click)="openWhatsApp(item.listedBy.phone, 'Hello '+item.listedBy.name+', I am interested in buying the '+item.name+ ' with the following details: \n Breed: '+item.breed.name+', \n Age: '+item.age+', \n Could you provide more details about availability and pricing?')"><i class="bi bi-whatsapp"></i> WhatsApp Seller</a>
+											  <a class="button" href="javascript:;" *ngIf="!isLoggedIn()" [routerLink]="['/login']"><i class="bi bi-login"></i> Login to Contact and see price</a>
 											  <!-- <a class="button" href="javascript:;" (click)="openWhatsApp(item.listedBy.phone, 'Hello '+item.seller.name+', I am interested in buying the '+item.name+ ' with the following details: \n Breed: '+item.breed+', \n Age: '+item.age+', \n Color: '+item.color+'. \n Could you provide more details about availability and pricing?')"><i class="bi bi-whatsapp"></i> WhatsApp Seller</a> -->
 											</div>
 										</div>
@@ -107,8 +112,10 @@
         <li>Be safe, take necessary precautions while meeting with buyers and sellers</li>
         <li>Do not enter UPI PIN while receiving money</li>
         <li>Never give money or product in advance</li>
-        <li>Report suspicious users to PET LINE</li>
+        <li>Report suspicious users to Homie Pet</li>
     </ul>
     <button type="button" data-bs-dismiss="dialog" (click)="toggleDialogConfirm()">CONTINUE TO OFFER</button>
 	</div>
 </dialog>
+
+<!-- <app-filter-bottom-sheet [isOpen]="isBottomSheetOpen" (onClose)="isBottomSheetOpen = false"></app-filter-bottom-sheet> -->

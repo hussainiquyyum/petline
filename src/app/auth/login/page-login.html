@@ -15,6 +15,12 @@
 			<div class="text-center text-inverse text-opacity-50">
 				Don't have an account yet? <a routerLink="/register">Sign up</a>.
 			</div>
+
+			<div class="text-center mt-4 pt-4">
+				<button type="button" class="btn btn-outline-default btn-lg d-block w-100 fw-500" routerLink="/home">
+					Continue without login
+				</button>
+			</div>
 		</form>
 		<form *ngIf="isOtpSent" [formGroup]="form" (ngSubmit)="verifyOTP()">
 			<h1 class="text-center">Login</h1>
@@ -34,6 +40,7 @@
 			</div>
 		</form>
 	</div>
+
 	<!-- END login-content -->
 </div>
 <!-- END login -->

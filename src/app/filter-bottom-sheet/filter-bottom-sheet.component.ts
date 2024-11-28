@@ -4,9 +4,10 @@ import { Breed } from '../interface/pets.interface';
 import { finalize, Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-filter-bottom-sheet',
-  templateUrl: './filter-bottom-sheet.component.html',
-  styleUrl: './filter-bottom-sheet.component.scss'
+    selector: 'app-filter-bottom-sheet',
+    templateUrl: './filter-bottom-sheet.component.html',
+    styleUrl: './filter-bottom-sheet.component.scss',
+    standalone: false
 })
 export class FilterBottomSheetComponent implements OnInit {
   @Input() isOpen:boolean = false;

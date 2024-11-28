@@ -1,11 +1,12 @@
 import { Component, HostListener } from '@angular/core';
 
 @Component({
-  selector: 'sidebar-mobile-backdrop',
-  templateUrl: './sidebar-mobile-backdrop.component.html',
-  host: {
-  	class: 'app-sidebar-mobile-backdrop'
-  }
+    selector: 'sidebar-mobile-backdrop',
+    templateUrl: './sidebar-mobile-backdrop.component.html',
+    host: {
+        class: 'app-sidebar-mobile-backdrop'
+    },
+    standalone: false
 })
 
 export class SidebarMobileBackdropComponent {

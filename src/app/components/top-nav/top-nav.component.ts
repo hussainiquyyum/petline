@@ -6,11 +6,12 @@ declare var slideUp: any;
 declare var slideToggle: any;
 
 @Component({
-  selector: 'top-nav',
-  templateUrl: './top-nav.component.html',
-  host: {
-  	class: 'app-top-nav'
-  }
+    selector: 'top-nav',
+    templateUrl: './top-nav.component.html',
+    host: {
+        class: 'app-top-nav'
+    },
+    standalone: false
 })
 
 export class TopNavComponent implements OnInit {

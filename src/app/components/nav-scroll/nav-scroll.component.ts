@@ -3,8 +3,9 @@ import { Component, Input, AfterViewInit, HostListener } from '@angular/core';
 declare var bootstrap: any;
 
 @Component({
-	selector: 'nav-scroll',
-	template: '<nav class="navbar navbar-sticky d-none d-xl-block"><nav class="nav"><ng-content></ng-content></nav></nav>',
+    selector: 'nav-scroll',
+    template: '<nav class="navbar navbar-sticky d-none d-xl-block"><nav class="nav"><ng-content></ng-content></nav></nav>',
+    standalone: false
 })
 export class NavScrollComponent implements AfterViewInit {
   @HostListener('click', ['$event', '$event.target'])

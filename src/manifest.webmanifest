@@ -1,13 +1,13 @@
 {
-  "name": "petservice",
-  "short_name": "petservice",
+  "name": "HomiePet",
+  "short_name": "HomiePet",
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
   "orientation": "portrait",
-  "description": "PetService is your go-to app for adopting pets and scheduling appointments.",
+  "description": "HomiePet is your go-to app for adopting pets and scheduling appointments.",
   "categories": ["lifestyle", "utilities"],
   "shortcuts": [
     {
