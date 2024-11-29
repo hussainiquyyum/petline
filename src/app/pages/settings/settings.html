@@ -17,23 +17,30 @@
 							<div class="list-group list-group-flush">
 								<div class="list-group-item d-flex align-items-center">
 									<div class="flex-1 text-break">
-										<div *ngIf="!nameEditing()">Name</div>
-										<div class="text-inverse text-opacity-50" *ngIf="!nameEditing()">{{ userInfo.name }}</div>
-										<input type="text" class="form-control" name="name" [(ngModel)]="userInfo.name" *ngIf="nameEditing()">
+										<div *ngIf="!loadProfile.nameEditing()">Name</div>
+										<div class="text-inverse text-opacity-50" *ngIf="!loadProfile.nameEditing()">{{ userInfo.name }}</div>
+										<input type="text" class="form-control" (keyup.enter)="onSaveProfile('name')" name="name" [(ngModel)]="userInfo.name" *ngIf="loadProfile.nameEditing()">
 									</div>
-									<div class="w-100px">
-										<button (click)="editName()" class="btn btn-outline-default w-100px" *ngIf="!nameEditing()">Edit</button>
-										<button (click)="saveName()" [disabled]="nameEditingLoading()" class="btn btn-outline-default w-100px" *ngIf="nameEditing()"><i class="fa fa-circle-notch fa-spin" *ngIf="nameEditingLoading()"></i> {{nameEditingLoading() ? 'Saving...' : 'Save'}}</button>
-										<!-- <a href="#modalEdit" data-bs-toggle="modal" class="btn btn-outline-default w-100px">Edit</a> -->
+									<div *ngIf="!loadProfile.nameEditing()">
+										<button (click)="onEditProfile('name')" [disabled]="isAnyProfileEditing()" class="btn btn-outline-default w-100px">Edit</button>
+									</div>
+									<div *ngIf="loadProfile.nameEditing()">
+										<button (click)="onSaveProfile('name')" [disabled]="loadProfile.nameEditingLoading()" class="btn btn-outline-default w-100px"><i class="fa fa-circle-notch fa-spin" *ngIf="loadProfile.nameEditingLoading()"></i> {{loadProfile.nameEditingLoading() ? 'Saving...' : 'Save'}}</button>
+										<button (click)="onEditProfileCancel('name')" [disabled]="loadProfile.nameEditingLoading()" class="btn btn-outline-danger w-50px"> <i class="fa fa-times"></i> </button>
 									</div>
 								</div>
 								<div class="list-group-item d-flex align-items-center">
 									<div class="flex-1 text-break">
-										<div>Username</div>
-										<div class="text-inverse text-opacity-50">&#64;{{ userInfo.username }}</div>
+										<div *ngIf="!loadProfile.userNameEditing()">Username</div>
+										<div class="text-inverse text-opacity-50" *ngIf="!loadProfile.userNameEditing()">&#64;{{ userInfo.username }}</div>
+										<input type="text" class="form-control" (keyup.enter)="onSaveProfile('userName')" name="username" [(ngModel)]="userInfo.username" *ngIf="loadProfile.userNameEditing()">
 									</div>
-									<div>
-										<a href="#modalEdit" data-bs-toggle="modal" class="btn btn-outline-default w-100px">Edit</a>
+									<div *ngIf="!loadProfile.userNameEditing()">
+										<button (click)="onEditProfile('userName')" [disabled]="isAnyProfileEditing()" class="btn btn-outline-default w-100px">Edit</button>
+									</div>
+									<div *ngIf="loadProfile.userNameEditing()">
+										<button (click)="onSaveProfile('userName')" [disabled]="loadProfile.userNameEditingLoading()" class="btn btn-outline-default w-100px" *ngIf="loadProfile.userNameEditing()"><i class="fa fa-circle-notch fa-spin" *ngIf="loadProfile.userNameEditingLoading()"></i> {{loadProfile.userNameEditingLoading() ? 'Saving...' : 'Save'}}</button>
+										<button (click)="onEditProfileCancel('userName')" [disabled]="loadProfile.userNameEditingLoading()" class="btn btn-outline-danger w-50px"> <i class="fa fa-times"></i> </button>
 									</div>
 								</div>
 								<div class="list-group-item d-flex align-items-center">
@@ -42,25 +49,36 @@
 										<div class="text-inverse text-opacity-50">+{{ userInfo.phone }}</div>
 									</div>
 									<div>
-										<a href="#modalEdit" data-bs-toggle="modal" class="btn btn-outline-default w-100px">Edit</a>
+										<span class="text-muted"> Not editable </span>
+										<!-- <a href="#modalEdit" data-bs-toggle="modal" class="btn btn-outline-default w-100px">Edit</a> -->
 									</div>
 								</div>
 								<div class="list-group-item d-flex align-items-center">
 									<div class="flex-1 text-break">
-										<div>Email address</div>
-										<div class="text-inverse text-opacity-50">{{ userInfo.email }}</div>
+										<div *ngIf="!loadProfile.emailEditing()">Email address</div>
+										<div class="text-inverse text-opacity-50" *ngIf="!loadProfile.emailEditing()">{{ userInfo.email }}</div>
+										<input type="text" class="form-control" (keyup.enter)="onSaveProfile('email')" name="email" [(ngModel)]="userInfo.email" *ngIf="loadProfile.emailEditing()">
 									</div>
-									<div>
-										<a href="#modalEdit" data-bs-toggle="modal" class="btn btn-outline-default w-100px">Edit</a>
+									<div *ngIf="!loadProfile.emailEditing()">
+										<button (click)="onEditProfile('email')" [disabled]="isAnyProfileEditing()" class="btn btn-outline-default w-100px">Edit</button>
+									</div>
+									<div *ngIf="loadProfile.emailEditing()">
+										<button (click)="onSaveProfile('email')" [disabled]="loadProfile.emailEditingLoading()" class="btn btn-outline-default w-100px"><i class="fa fa-circle-notch fa-spin" *ngIf="loadProfile.emailEditingLoading()"></i> {{loadProfile.emailEditingLoading() ? 'Saving...' : 'Save'}}</button>
+										<button (click)="onEditProfileCancel('email')" [disabled]="loadProfile.emailEditingLoading()" class="btn btn-outline-danger w-50px"> <i class="fa fa-times"></i> </button>
 									</div>
 								</div>
 								<div class="list-group-item d-flex align-items-center">
 									<div class="flex-1 text-break">
-										<div>Date of birth</div>
-										<div class="text-inverse text-opacity-50">{{ userInfo.dob | date: 'dd/MM/yyyy' }}</div>
+										<div *ngIf="!loadProfile.dobEditing()">Date of birth</div>
+										<div class="text-inverse text-opacity-50" *ngIf="!loadProfile.dobEditing()">{{ userInfo.dob | date: 'dd/MM/yyyy' }}</div>
+										<input class="form-control" placeholder="yyyy-mm-dd" *ngIf="loadProfile.dobEditing()" (keyup.enter)="onSaveProfile('dob')" name="datepicker_default" (click)="d.toggle()" [(ngModel)]="userInfo.dob" ngbDatepicker #d="ngbDatepicker" autocomplete="off" />
 									</div>
-									<div>
-										<a href="#modalEdit" data-bs-toggle="modal" class="btn btn-outline-default w-100px">Edit</a>
+									<div *ngIf="!loadProfile.dobEditing()">
+										<button (click)="onEditProfile('dob')" [disabled]="isAnyProfileEditing()" class="btn btn-outline-default w-100px" *ngIf="!loadProfile.dobEditing()">Edit</button>
+									</div>
+									<div *ngIf="loadProfile.dobEditing()">
+										<button (click)="onSaveProfile('dob')" [disabled]="loadProfile.dobEditingLoading()" class="btn btn-outline-default w-100px"><i class="fa fa-circle-notch fa-spin" *ngIf="loadProfile.dobEditingLoading()"></i> {{loadProfile.dobEditingLoading() ? 'Saving...' : 'Save'}}</button>
+										<button (click)="onEditProfileCancel('dob')" [disabled]="loadProfile.dobEditingLoading()" class="btn btn-outline-danger w-50px"> <i class="fa fa-times"></i> </button>
 									</div>
 								</div>
 							</div>
