@@ -57,6 +57,7 @@ export class OtpComponent implements OnInit, OnDestroy, AfterViewInit {
     this.route.queryParams.subscribe((params: any) => {
       this.mobile = params.phone;
     });
+    this.startTimer(60);
   }
   
   ngOnDestroy() {
@@ -76,10 +77,7 @@ export class OtpComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isOtpSent = true;
         this.isLoading = false;
         this.maskedMobile = res.maskedMobileNumber;
-        const {resendOTP, countdown} = this.startTimer(60);
-        this.resendOTP = resendOTP;
-        this.countdown = countdown ?? '';
-        console.log(resendOTP, countdown);
+        this.startTimer(60);
       },
       error: (err) => {
         this.isLoading = false;
@@ -105,13 +103,13 @@ export class OtpComponent implements OnInit, OnDestroy, AfterViewInit {
       let seconds = timer % 60;
       seconds = seconds < 10 ? 0 + seconds : seconds;
       countdown = `${minutes}:${seconds}`;
-      console.log(countdown);
+      this.countdown = countdown;
       if (--timer < 0) {
         resendOTP = true;
         clearInterval(this.interval);
       }
+      this.resendOTP = resendOTP;
     }, 1000);
-    return {resendOTP, countdown};
   }
 
   changeMobile() {
