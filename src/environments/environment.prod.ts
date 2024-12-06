@@ -3,5 +3,6 @@ export const environment = {
   frontendUrl: 'http://localhost:4200',
   socketUrl: '',
   apiUrl: '/api',
-  uploadUrl: '/'
+  uploadUrl: '/',
+  version: '1.1.1'
 };

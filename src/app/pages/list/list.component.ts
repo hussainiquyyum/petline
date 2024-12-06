@@ -94,7 +94,10 @@ export class ListPage implements OnInit, OnDestroy {
 	animals: any;
 	breeds: Breed[] = [];
 	isLoggedIn = signal(false);
-	constructor(private appSettings: AppSettings, private http: HttpClient) {
+	constructor(
+		private appSettings: AppSettings, 
+		private http: HttpClient
+	) {
 		this.appSettings.appHeaderNone = false;
 		this.appSettings.appSidebarNone = true;
 		this.appSettings.appContentClass = 'p-1 ps-xl-4 pe-xl-4 pt-xl-3 pb-xl-3';

@@ -1,10 +1,14 @@
-import { Component, EventEmitter, ChangeDetectorRef, inject, computed, HostListener, signal } from '@angular/core';
+import { Component, EventEmitter, ChangeDetectorRef, inject, computed, HostListener, signal, DestroyRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular/router';
 import { AppSettings } from './service/app-settings.service';
 import * as PullToRefresh from 'pulltorefreshjs';
 import { AuthService } from './service/auth.service';
 import { AppVariablesService } from './service/app-variables.service';
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import Swal from 'sweetalert2';
+import { environment } from '../environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -25,7 +29,9 @@ export class AppComponent {
 	public isAndroid = false;
 	public isIOS = false;
 	public brandName = inject(AppVariablesService).brandName;
-	
+	private swUpdate = inject(SwUpdate);
+	private destroyRef = inject(DestroyRef);
+
 	constructor(public appSettings: AppSettings, private cdr: ChangeDetectorRef) { 
 		// const savedToken = localStorage.getItem('accessToken');
 		// if (savedToken) {
@@ -52,6 +58,7 @@ export class AppComponent {
 				// Stash the event so it can be triggered later.
 			}
 		});
+		this.checkForUpdates();
 	}
 	
 	handleSetCover(coverClass: string) {
@@ -166,5 +173,38 @@ export class AppComponent {
 
 	closeIOSPrompt() {
 		this.showInstallButton = false;
+	}
+
+	private checkForUpdates(): void {
+		if (this.swUpdate.isEnabled) {
+			// Check for updates when app starts
+			this.swUpdate.checkForUpdate();
+
+			// Listen for available updates
+			this.swUpdate.versionUpdates.pipe(
+				takeUntilDestroyed(this.destroyRef)
+			).subscribe((event) => {
+				if (event.type === 'VERSION_READY') {
+					Swal.fire({
+						title: 'New Version Available',
+						text: `A new version is available. Would you like to update?`,
+						icon: 'info',
+						toast: true,
+						position: 'top',
+						showCancelButton: false,
+						showConfirmButton: false,
+					}).then(() => {
+						this.swUpdate.activateUpdate().then(() => {
+							window.location.reload();
+						});
+					});
+				}
+			});
+
+			// Check for updates every 6 hours
+			setInterval(() => {
+				this.swUpdate.checkForUpdate();
+			}, 6 * 60 * 60 * 1000);
+		}
 	}
 }
