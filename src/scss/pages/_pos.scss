@@ -90,8 +90,10 @@ $button-radius: 2px;
 		display: flex;
 	
 		@include media-breakpoint-up(lg) {
-			width: $pos-sidebar-menu-width;
+			// width: $pos-sidebar-menu-width;
+			width: 100%;
 			flex-direction: column;
+			justify-content: center;
 		}
 		@include media-breakpoint-down(lg) {
 			overflow-x: auto !important;
