@@ -58,10 +58,10 @@ import { CartComponent }                  from './pages/cart/cart.component';
 import { SettingsPage }                    from './pages/settings/settings';
 import { HomePage }                   		 from './pages/home/home';
 import { ErrorPage }                       from './pages/page/error/page-error';
-import { PosCustomerOrderPage }            from './pages/pos/customer-order/pos-customer-order';
+import { ListPage }            from './pages/list/list.component';
 import { AuthInterceptor } from './service/http.interceptor';
 import { OtpComponent } from './auth/otp/otp.component';
-import { ProductDetailsPage } from './pages/product-details/page-product-details';
+import { NewListingPage } from './pages/new-listing/new-listing.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { ImageSrcPipe } from './shared/pipe/image-src.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
@@ -127,8 +127,8 @@ export class SentryErrorHandler implements ErrorHandler {
     LoginPage,
     OtpComponent,
     RegisterPage,
-    PosCustomerOrderPage,
-    ProductDetailsPage,
+    ListPage,
+    NewListingPage,
     NgOtpInputValueAccessorDirective,
     NavComponent,
     SettingsPage,
@@ -210,13 +210,13 @@ export class SentryErrorHandler implements ErrorHandler {
 })
 
 export class AppModule {
-	title: string = 'Homie Pet';
+	title: string = '{{brandName}}';
 	
   constructor(private router: Router, private titleService: Title, private route: ActivatedRoute) {
     router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
       	if (this.route.snapshot.firstChild && this.route.snapshot.firstChild.data['title']) {
-      		this.title = 'Homie Pet | '+ this.route.snapshot.firstChild.data['title'];
+      		this.title = '{{brandName}} | '+ this.route.snapshot.firstChild.data['title'];
       	}
         this.titleService.setTitle(this.title);
         

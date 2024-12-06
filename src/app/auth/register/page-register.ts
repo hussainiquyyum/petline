@@ -3,6 +3,7 @@ import { Router }    from '@angular/router';
 import { FormControl, FormGroup, NgForm, Validators }    from '@angular/forms';
 import { AppSettings } from '../../service/app-settings.service';
 import { AuthService } from '../../service/auth.service';
+import { AppVariablesService } from '../../service/app-variables.service';
 
 @Component({
     selector: 'page-register',
@@ -14,6 +15,7 @@ export class RegisterPage {
   private appSettings = inject(AppSettings);
   private authService = inject(AuthService);
   private router = inject(Router);
+  public brandName = inject(AppVariablesService).brandName;
 
   public form = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
