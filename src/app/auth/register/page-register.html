@@ -4,7 +4,7 @@
 	<div class="register-content">
 		<form (ngSubmit)="formSubmit()" [formGroup]="form">
 			<h1 class="text-center">Sign Up</h1>
-			<p class="text-inverse text-opacity-50 text-center">Experience the convenience of a single Homie Pet ID to unlock all online ordering services.</p>
+			<p class="text-inverse text-opacity-50 text-center">Experience the convenience of a single {{brandName}} ID to unlock all online ordering services.</p>
 			<div class="mb-3">
 				<label class="form-label">Name <span class="text-danger">*</span></label>
 				<input type="text" formControlName="name" class="form-control form-control-lg bg-inverse bg-opacity-5" placeholder="e.g John Smith" value="">
