@@ -4,23 +4,27 @@ import { Router, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular
 import { AppSettings } from './service/app-settings.service';
 import * as PullToRefresh from 'pulltorefreshjs';
 import { AuthService } from './service/auth.service';
+import { AppVariablesService } from './service/app-variables.service';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
+    styleUrls: ['./app.component.scss'],
     standalone: false
 })
 
 export class AppComponent {
 	private authService = inject(AuthService);
 	private router = inject(Router);
-	appEvent = new EventEmitter<string>();
-	appLoaded: boolean = false;
-	isLoggedIn = signal(false);
-	isLoginPage = signal(false);
-	deferredPrompt: any;
-	showInstallButton = false;
+	public appEvent = new EventEmitter<string>();
+	public appLoaded: boolean = false;
+	public isLoggedIn = signal(false);
+	public isLoginPage = signal(false);
+	public deferredPrompt: any;
+	public showInstallButton = false;
+	public isAndroid = false;
+	public isIOS = false;
+	public brandName = inject(AppVariablesService).brandName;
 	
 	constructor(public appSettings: AppSettings, private cdr: ChangeDetectorRef) { 
 		// const savedToken = localStorage.getItem('accessToken');
@@ -31,6 +35,21 @@ export class AppComponent {
 		this.router.events.subscribe((event) => {
 			if (event instanceof NavigationEnd) {
 				this.isLoginPage.set(this.router.url.includes('/login') || this.router.url.includes('/register') || this.router.url.includes('/otp'));
+			}
+		});
+		// Check if it's Android
+		this.isAndroid = /Android/i.test(navigator.userAgent);
+		this.isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+		
+		window.addEventListener('beforeinstallprompt', (e: any) => {
+			// Prevent Chrome 67 and earlier from automatically showing the prompt
+			e.preventDefault();
+			
+			// Show the prompt only if it's Android
+			this.deferredPrompt = e;
+			this.showInstallButton = true;
+			if (this.isAndroid) {
+				// Stash the event so it can be triggered later.
 			}
 		});
 	}
@@ -125,25 +144,27 @@ export class AppComponent {
 		this.showInstallButton = true;
 	}
 
-	installPWA() {
-		// Hide the install button
-		this.showInstallButton = false;
-		// Show the install prompt
-		this.deferredPrompt.prompt();
-		// Wait for the user to respond to the prompt
-		this.deferredPrompt.userChoice.then((choiceResult: any) => {
-			if (choiceResult.outcome === 'accepted') {
-				console.log('User accepted the A2HS prompt');
-			} else {
-				console.log('User dismissed the A2HS prompt');
-			}
+	async installPWA() {
+		if (this.deferredPrompt) {
+			// Show the prompt
+			this.deferredPrompt.prompt();
+			
+			// Wait for the user to respond to the prompt
+			const { outcome } = await this.deferredPrompt.userChoice;
+			
+			// We no longer need the prompt. Clear it up
 			this.deferredPrompt = null;
-		});
+			this.showInstallButton = false;
+		}
 	}
 
 	@HostListener('window:appinstalled', ['$event'])
 	onAppInstalled(event: Event) {
 		console.log('PWA was installed');
 		// You can perform additional actions here if needed
+	}
+
+	closeIOSPrompt() {
+		this.showInstallButton = false;
 	}
 }

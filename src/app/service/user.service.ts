@@ -18,6 +18,6 @@ export class UserService {
   }
 
   updateUser(user: User) {
-    return this.http.put(`${API_URL}/name`, user);
+    return this.http.put(`${API_URL}/profile`, user);
   }
 }

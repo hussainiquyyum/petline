@@ -1228,12 +1228,13 @@ $button-radius: 2px;
   overflow: hidden;
 
   img {
-    width: 100%; /* Makes the image responsive */
-    // border-bottom: 2px solid #f0f0f0;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-	border-radius: 12px;
+	width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
     height: 300px;
-    object-fit:fill;
+    object-fit: contain;
+    aspect-ratio: 3 / 2;
+    mix-blend-mode: color-burn;
   }
 
   &-content {

@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, Renderer2, OnDestroy, inject, signal, computed } from '@angular/core';
 import { AppSettings } from '../../service/app-settings.service';
 import { PetsService } from '../../service/pets.service';
+import { AppVariablesService } from '../../service/app-variables.service';
 
 declare var slideToggle: any;
 
@@ -24,6 +25,7 @@ export class HeaderComponent {
 	public filters: string[] = [];
 	public isBottomSheetOpen:boolean = false;
 	public isBottomSheetOpenSignal = computed(() => this._petsService.isBottomSheetOpen());
+	public brandName = inject(AppVariablesService).brandName;
 	
 	/*
 	notificationData = [{

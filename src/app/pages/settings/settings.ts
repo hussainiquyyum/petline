@@ -29,8 +29,16 @@ export class SettingsPage implements OnInit  {
   public userInfo: User = {} as User;
   public data: any[] = [];
   public gettingPets = signal(false);
-  public nameEditing = signal(false);
-  public nameEditingLoading = signal(false);
+  public loadProfile: any = {
+    nameEditing: signal(false),
+    nameEditingLoading: signal(false),
+    userNameEditing: signal(false),
+    userNameEditingLoading: signal(false),
+    dobEditing: signal(false),
+    dobEditingLoading: signal(false),
+    emailEditing: signal(false),
+    emailEditingLoading: signal(false),
+  };
   public loggingOut = signal(false);
   
   constructor() {
@@ -53,19 +61,33 @@ export class SettingsPage implements OnInit  {
     });
   }
 
-  editName() {
-    this.nameEditing.set(!this.nameEditing());
+  onEditName() {
+    this.loadProfile.nameEditing.set(!this.loadProfile.nameEditing());
   }
 
-  saveName() {
-    this.nameEditingLoading.set(true);
+  onSaveProfile(type: string) {
+    this.loadProfile[`${type}EditingLoading`].set(true);
     this.userService.updateUser(this.userInfo).pipe(
-      finalize(() => this.nameEditingLoading.set(false)),
+      finalize(() => this.loadProfile[`${type}EditingLoading`].set(false)),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((res: any) => {
       this.userInfo = res;
-      this.nameEditing.set(false);
+      this.loadProfile[`${type}Editing`].set(false);
     });
+  }
+
+  isAnyProfileEditing(): boolean {
+    return Object.keys(this.loadProfile)
+      .filter(key => key.includes('Editing') && !key.includes('Loading'))
+      .some(key => this.loadProfile[key]());
+  }
+
+  onEditProfile(type: string) {
+    this.loadProfile[`${type}Editing`].set(true);
+  }
+
+  onEditProfileCancel(type: string) {
+    this.loadProfile[`${type}Editing`].set(false);
   }
 
   logout() {

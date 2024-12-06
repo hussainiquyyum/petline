@@ -9,7 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "start-pwa": "ng build --configuration=production && http-server -p 8080 -c-1 dist"
+    "start-pwa": "ng build --configuration=production && http-server -p 8080 -c-1 dist",
+    "build-prod": "ng build --configuration=production"
   },
   "private": true,
   "dependencies": {

@@ -6,6 +6,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 
 export class AppVariablesService {
 	variablesReload = new EventEmitter();
+	brandName = 'Homie Pet';
 	
 	getAppVariables() {
 		return {

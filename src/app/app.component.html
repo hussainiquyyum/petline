@@ -35,6 +35,41 @@
 <div class="landscape-warning">
   <img src="assets/img/8.webp" alt="Please use a portrait orientation to view this app.">
 </div>
-<div *ngIf="showInstallButton">
-  <button (click)="installPWA()">Install App</button>
+<div *ngIf="showInstallButton&&isAndroid" class="pwa-install-prompt">
+  <div class="prompt-content">
+    <div class="app-info">
+      <img src="assets/icons/icon-128x128.png" alt="{{brandName}}s" class="app-icon">
+      <div class="app-details">
+        <h2>{{brandName}}s</h2>
+        <span class="app-url">homiepets.in</span>
+      </div>
+    </div>
+    <p class="app-description">
+      Get the full experience with our app. Access all features faster with less data usage.
+    </p>
+    <div class="action-buttons">
+      <button class="install-button" (click)="installPWA()">Install</button>
+    </div>
+  </div>
+</div>
+<div *ngIf="showInstallButton && isIOS" class="pwa-install-prompt ios-prompt">
+  <div class="prompt-content">
+    <div class="prompt-header">
+      <h2>Install {{brandName}}s</h2>
+      <button class="close-button" (click)="closeIOSPrompt()">✕</button>
+    </div>
+    <p class="install-instructions">
+      Install the app on your device to easily access it anytime. No app store. No download. No hassle.
+    </p>
+    <div class="install-steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-text">Tap on <img src="assets/icons/ios-share.svg" alt="share" class="ios-share-icon"/></div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-text">Select <strong>Add to Home Screen</strong></div>
+      </div>
+    </div>
+  </div>
 </div>
