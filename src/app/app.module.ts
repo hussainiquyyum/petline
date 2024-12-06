@@ -2,7 +2,7 @@
 import { Router, NavigationEnd, ActivatedRoute }   from '@angular/router';
 import { CommonModule, JsonPipe }                  from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule }                        from '@angular/common/http';
-import { APP_INITIALIZER, ErrorHandler, NgModule, isDevMode }                                from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, NgModule, inject, isDevMode }                                from '@angular/core';
 import { FormsModule, ReactiveFormsModule }        from '@angular/forms';
 import { BrowserModule, Title }                    from '@angular/platform-browser';
 import { BrowserAnimationsModule }                 from '@angular/platform-browser/animations';
@@ -210,13 +210,13 @@ export class SentryErrorHandler implements ErrorHandler {
 })
 
 export class AppModule {
-	title: string = '{{brandName}}';
+	public title: string = 'Homie Pets';
 	
   constructor(private router: Router, private titleService: Title, private route: ActivatedRoute) {
     router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
       	if (this.route.snapshot.firstChild && this.route.snapshot.firstChild.data['title']) {
-      		this.title = '{{brandName}} | '+ this.route.snapshot.firstChild.data['title'];
+      		this.title = 'Homie Pets | '+ this.route.snapshot.firstChild.data['title'];
       	}
         this.titleService.setTitle(this.title);
         
