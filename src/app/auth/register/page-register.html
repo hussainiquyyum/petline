@@ -39,7 +39,8 @@
 			</div>
 			<div class="mb-3">
 				<label class="form-label">Date of Birth</label>
-				<input class="form-control" placeholder="yyyy-mm-dd" name="datepicker_default" (click)="d.toggle()" formControlName="dob" ngbDatepicker #d="ngbDatepicker" autocomplete="off" />
+				<input class="form-control"  matInput [matDatepicker]="picker" placeholder="yyyy-mm-dd" (click)="picker.open()" name="datepicker_default"formControlName="dob" autocomplete="off" />
+				<mat-datepicker touchUi #picker></mat-datepicker>
 				<div *ngIf="form.get('dob')?.invalid && form.get('dob')?.touched" class="text-danger">
 					Date of Birth is required.
 				</div>

@@ -22,7 +22,7 @@ export class RegisterPage {
     email: new FormControl('', [Validators.email]),
     mobile: new FormControl('', [Validators.required, Validators.minLength(10), Validators.pattern(/^[0-9]{10}$/), Validators.maxLength(10)]),
     gender: new FormControl('', [Validators.required]),
-    dob: new FormControl('', [Validators.required]),
+    dob: new FormControl<Date | null>(null, [Validators.required]),
     terms: new FormControl('', [Validators.required]),
   });
   

@@ -68,7 +68,11 @@ import { FileSizePipe } from './pipes/file-size.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FilterBottomSheetComponent } from './filter-bottom-sheet/filter-bottom-sheet.component';
 import * as Sentry from '@sentry/angular';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { environment } from '../environments/environment';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 Sentry.init({
   dsn: "https://cd12303fc780ad9d9257719d48da8288@o4508347076444160.ingest.de.sentry.io/4508347079065680",
@@ -164,6 +168,10 @@ export class SentryErrorHandler implements ErrorHandler {
     NgbProgressbarModule,
     NgOtpInputModule,
     NgbCarouselModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule,
   	QuillModule.forRoot(),
    ServiceWorkerModule.register('ngsw-worker.js', {
      enabled: environment.production,
