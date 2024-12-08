@@ -187,12 +187,15 @@ export class AppComponent {
 				if (event.type === 'VERSION_READY') {
 					Swal.fire({
 						title: 'New Version Available',
-						text: `A new version is available. Would you like to update?`,
+						text: `A new version is available. Automatically updating...`,
 						icon: 'info',
+						confirmButtonText: `Update`,
 						toast: true,
 						position: 'top',
+						timer: 6000,
+						timerProgressBar: true,
 						showCancelButton: false,
-						showConfirmButton: false,
+						allowOutsideClick: true,
 					}).then(() => {
 						this.swUpdate.activateUpdate().then(() => {
 							window.location.reload();
