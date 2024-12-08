@@ -6,9 +6,9 @@ import { AuthService } from '../../service/auth.service';
 import { AppVariablesService } from '../../service/app-variables.service';
 
 @Component({
-    selector: 'page-register',
-    templateUrl: './page-register.html',
-    standalone: false
+  selector: 'page-register',
+  templateUrl: './page-register.html',
+  standalone: false
 })
 
 export class RegisterPage {

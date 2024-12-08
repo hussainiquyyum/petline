@@ -9,5 +9,5 @@ export const environment = {
   socketUrl: 'http://localhost:3000',
   apiUrl: 'http://localhost:3000/api',
   uploadUrl: 'http://localhost:3000',
-  version: '1.1.1'
+  version: '1.1.3'
 };

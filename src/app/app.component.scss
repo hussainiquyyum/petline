@@ -37,6 +37,9 @@
       height: calc(100vh - 140px) !important;
       overflow: scroll;
     }
+    .app-content:has(.register) {
+      height: 100% !important;
+    }
   }
 
   .pwa-install-prompt {
