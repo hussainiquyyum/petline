@@ -1,11 +1,11 @@
-import { Component, EventEmitter, ChangeDetectorRef, inject, computed, HostListener, signal, DestroyRef } from '@angular/core';
+import { Component, EventEmitter, ChangeDetectorRef, inject, computed, HostListener, signal, DestroyRef, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular/router';
 import { AppSettings } from './service/app-settings.service';
 import * as PullToRefresh from 'pulltorefreshjs';
 import { AuthService } from './service/auth.service';
 import { AppVariablesService } from './service/app-variables.service';
-import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
+import { SwUpdate, VersionReadyEvent, SwPush } from '@angular/service-worker';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import Swal from 'sweetalert2';
 import { environment } from '../environments/environment';
@@ -17,7 +17,7 @@ import { environment } from '../environments/environment';
     standalone: false
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
 	private authService = inject(AuthService);
 	private router = inject(Router);
 	public appEvent = new EventEmitter<string>();
@@ -31,8 +31,22 @@ export class AppComponent {
 	public brandName = inject(AppVariablesService).brandName;
 	private swUpdate = inject(SwUpdate);
 	private destroyRef = inject(DestroyRef);
+	public swPush = inject(SwPush);
 
-	constructor(public appSettings: AppSettings, private cdr: ChangeDetectorRef) { 
+	constructor(
+		public appSettings: AppSettings, 
+		private cdr: ChangeDetectorRef,
+	) { 
+		console.log('SwPush enabled:', this.swPush.isEnabled);
+		console.log('Service Worker supported:', 'serviceWorker' in navigator);
+		console.log('Push Manager supported:', 'PushManager' in window);
+
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.getRegistration().then(registration => {
+				console.log('Existing SW registration:', registration);
+			});
+		}
+		
 		// const savedToken = localStorage.getItem('accessToken');
 		// if (savedToken) {
 		// 	this.authService.customerLogin(savedToken).subscribe();
@@ -134,6 +148,39 @@ export class AppComponent {
 				console.error('Notification permission request failed:', error);
 			});
 		}
+
+		if (this.swPush.isEnabled) {
+			this.swPush.notificationClicks.subscribe(({ action, notification }) => {
+				console.log('Notification clicked', notification);
+				// Handle notification click - e.g., navigate to a specific route
+				if (notification.data && notification.data.url) {
+					this.router.navigateByUrl(notification.data.url);
+				}
+			});
+
+			// Subscribe to push notifications if user is logged in
+			// this.subscribeToNotifications();
+		}
+
+		// Request notification permission when user logs in
+		setTimeout(() => {
+			console.log('Checking if user is logged in');
+			if (this.isLoggedIn()) {
+				console.log('Requesting notification permission');
+				this.requestNotificationPermission();
+			}
+		}, 1000);
+
+		// Check service worker registration
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.getRegistration().then(registration => {
+				if (registration) {
+					console.log('Service Worker is registered:', registration);
+				} else {
+					console.error('No Service Worker registration found');
+				}
+			});
+		}
 	}
 	
 	ngAfterViewInit() {
@@ -208,6 +255,158 @@ export class AppComponent {
 			setInterval(() => {
 				this.swUpdate.checkForUpdate();
 			}, 6 * 60 * 60 * 1000);
+		}
+	}
+
+	async requestNotificationPermission() {
+		try {
+			// First check if service workers are supported
+			if (!('serviceWorker' in navigator)) {
+				console.error('Service Workers are not supported');
+				return;
+			}
+
+			// Then check if Push API is supported
+			if (!('PushManager' in window)) {
+				console.error('Push API is not supported');
+				return;
+			}
+
+			if (!this.swPush.isEnabled) {
+				console.error('Push notifications are not enabled. Checking why...');
+				
+				// Check if service worker is registered
+				const registration = await navigator.serviceWorker.getRegistration();
+				if (!registration) {
+					console.error('Service Worker is not registered');
+					return;
+				}
+
+				// Check if push subscription exists
+				const subscription = await registration.pushManager.getSubscription();
+				console.log('Existing subscription:', subscription);
+
+				return;
+			}
+
+			const permission = await Notification.requestPermission();
+			console.log('Notification permission:', permission);
+			
+			if (permission === 'granted') {
+				await this.subscribeToNotifications();
+			} else {
+				console.warn('Notification permission was not granted:', permission);
+			}
+		} catch (error) {
+			console.error('Error in requestNotificationPermission:', error);
+		}
+	}
+
+	private async subscribeToNotifications() {
+		try {
+			console.log('Starting push subscription process...');
+			console.log('SwPush enabled:', this.swPush.isEnabled);
+			
+			if (!this.swPush.isEnabled) {
+				const registration = await navigator.serviceWorker.getRegistration();
+				console.log('Current SW registration:', registration);
+				if (!registration) {
+					throw new Error('No Service Worker registration found');
+				}
+				throw new Error('Push notifications are not enabled');
+			}
+
+			if (Notification.permission === 'denied') {
+				throw new Error('User has denied push notification permission');
+			}
+
+			console.log('Requesting push subscription with VAPID key:', environment.vapidPublicKey);
+			const subscription = await this.swPush.requestSubscription({
+				serverPublicKey: environment.vapidPublicKey
+			});
+
+			console.log('Push subscription obtained:', subscription);
+
+			// Send subscription to backend
+			// this.authService.saveSubscription(subscription, this.userInfo._id??'').subscribe((res: any) => {
+			// 	console.log('Subscription saved to backend', res);
+			// });
+
+			// Set up listeners
+			this.setupNotificationListeners();
+		} catch (error) {
+			console.error('Detailed subscription error:', error);
+			throw error;
+		}
+	}
+
+	private setupNotificationListeners() {
+		this.swPush.messages.pipe(
+			takeUntilDestroyed(this.destroyRef)
+		).subscribe({
+			next: message => {
+				console.log('Push message received:', message);
+				this.handlePushMessage(message);
+			},
+			error: error => {
+				console.error('Push message error:', error);
+			}
+		});
+
+		this.swPush.notificationClicks.pipe(
+			takeUntilDestroyed(this.destroyRef)
+		).subscribe({
+			next: event => {
+				console.log('Notification clicked:', event);
+				this.handleNotificationClick(event);
+			},
+			error: error => {
+				console.error('Notification click error:', error);
+			}
+		});
+	}
+
+	private handlePushMessage(message: any) {
+		console.log('Received push message:', message);
+		
+		// Show a toast notification using SweetAlert2
+		Swal.fire({
+			title: message.title || 'New Notification',
+			text: message.body || '',
+			icon: 'info',
+			toast: true,
+			position: 'top',
+			showConfirmButton: false,
+			timer: 5000,
+			timerProgressBar: true,
+			didOpen: (toast) => {
+				toast.addEventListener('mouseenter', Swal.stopTimer);
+				toast.addEventListener('mouseleave', Swal.resumeTimer);
+			}
+		});
+	}
+
+	private handleNotificationClick(event: { action: string, notification: NotificationOptions & { data?: any } }) {
+		console.log('Notification clicked:', event);
+		
+		const { notification } = event;
+		
+		// Handle navigation if URL is provided in the notification data
+		if (notification.data?.url) {
+			this.router.navigateByUrl(notification.data.url);
+		}
+
+		// Handle other actions based on notification data
+		if (notification.data?.action) {
+			switch (notification.data.action) {
+				case 'openProfile':
+					this.router.navigate(['/profile']);
+					break;
+				case 'openMessages':
+					this.router.navigate(['/messages']);
+					break;
+				// Add other action handlers as needed
+			}
 		}
 	}
 }

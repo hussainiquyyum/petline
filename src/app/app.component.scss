@@ -198,3 +198,15 @@
     color: #333;
     font-size: 14px;
   }
+
+  .app-content {
+    display: block;
+    height: calc(100vh - 140px) !important;
+    overflow: scroll;
+  }
+
+  .app-without-header {
+    .app-content {
+      height: calc(100vh - 75px) !important;
+    }
+  }

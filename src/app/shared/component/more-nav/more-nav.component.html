@@ -1,0 +1,35 @@
+<mat-nav-list class="more-nav-container">
+  <div class="nav-header">
+    <h2>More Options</h2>
+    <button mat-icon-button (click)="closeBottomSheet()">
+      <i class="bi bi-x"></i>
+    </button>
+  </div>
+
+  <a mat-list-item class="nav-item" (click)="navigateTo('/pet-profile')">
+    <img class="white-logo" src="assets/icons/icon-96x96.png" alt="Pet Profile">
+    <span>Pet Profile</span>
+  </a>
+
+  <a mat-list-item class="nav-item" (click)="navigateTo('/message')">
+    <i class="bi bi-chat-dots"></i>
+    <span>Message</span>
+  </a>
+
+  <a mat-list-item class="nav-item" (click)="navigateTo('/wishlist')">
+    <i class="bi bi-heart"></i>
+    <span>Wishlist</span>
+  </a>
+
+  <a mat-list-item class="nav-item" (click)="navigateTo('/settings')">
+    <i class="bi bi-gear"></i>
+    <span>Settings</span>
+  </a>
+
+  <a mat-list-item class="nav-item" (click)="navigateTo('/logout')">
+    <i class="bi bi-box-arrow-right"></i>
+    <span>Log out</span>
+  </a>
+
+</mat-nav-list>
+  

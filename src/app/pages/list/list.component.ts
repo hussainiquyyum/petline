@@ -31,6 +31,7 @@ interface DataResponse {
 @Component({
     selector: 'pos-list',
     templateUrl: './list.component.html',
+    styleUrl: './list.component.scss',
     standalone: false
 })
 

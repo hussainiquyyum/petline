@@ -1,5 +1,5 @@
-$button-color: #297739;
-$button-radius: 2px;
+$button-color: #0e0e0f;
+$button-radius: 10px;
 .search-container {
 	padding: 4px 0;
 	display: flex;
@@ -99,7 +99,7 @@ $button-radius: 2px;
 			overflow-x: auto !important;
 			overflow-y: hidden !important;
 			align-items: center;
-			border-top: 1px solid var(--#{$prefix}border-color);
+			// border-top: 1px solid var(--#{$prefix}border-color);
 		}
 	
 		& .logo {

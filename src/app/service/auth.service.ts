@@ -92,4 +92,14 @@ export class AuthService {
     // Implement your logic to check if the user is authenticated
     return !!localStorage.getItem('token');
   }
+
+  saveSubscription(subscription: PushSubscription, userId: string) {
+    return this.http.post(`${environment.apiUrl}/notifications/user/${userId}/subscribe`, subscription);
+  }
+
+  getCurrentUserId(): string {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user.userId;
+  }
 }
+

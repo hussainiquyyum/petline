@@ -1,0 +1,71 @@
+<div class="store-container">
+  <!-- Search and Cart Section -->
+  <div class="top-section">
+    <div class="search-bar">
+      <i class="bi bi-search"></i>
+      <input type="text" placeholder="Search..." [(ngModel)]="searchQuery">
+    </div>
+    <div class="cart-notifications">
+      <div class="cart-icon">
+        <i class="bi bi-bag"></i>
+        <span class="badge">1</span>
+      </div>
+      <div class="notification-icon">
+        <i class="bi bi-bell"></i>
+        <span class="badge">9+</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Promotional Banner -->
+  <div class="promo-banner">
+    <div class="promo-content">
+      <div class="tag">#PETS DAY</div>
+      <h1>80% OFF</h1>
+      <p>Discover products that suits your pet</p>
+      <button class="check-out-btn">Check this out</button>
+    </div>
+    <div class="promo-image">
+      <!-- Add your banner image here -->
+    </div>
+  </div>
+
+  <!-- Quick Action Categories -->
+  <div class="categories-wrapper">
+    <div class="quick-actions">
+      <div class="action-item" 
+           *ngFor="let category of categories"
+           [class.active]="selectedCategory === category.id"
+           (click)="selectCategory(category.id)">
+        <div class="action-icon">
+          <i [class]="category.icon"></i>
+        </div>
+        <span>{{ category.name }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Best Sale Products Section -->
+  <div class="section-header">
+    <h2>Best Sale Product</h2>
+    <a href="#" class="see-more">See more</a>
+  </div>
+
+  <div class="products-grid">
+    <div class="product-card" *ngFor="let product of products">
+      <div class="favorite-btn">
+        <i class="bi bi-heart"></i>
+      </div>
+      <img [src]="product.imageUrl" [alt]="product.name">
+      <div class="product-info">
+        <span class="category">{{ product.category }}</span>
+        <h3>{{ product.name }}</h3>
+        <div class="rating">
+          <i class="bi bi-star-fill"></i>
+          <span>{{ product.rating }} | {{ product.reviews }}</span>
+        </div>
+        <div class="price">${{ product.price }}</div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -67,46 +67,18 @@ import { ImageSrcPipe } from './shared/pipe/image-src.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FilterBottomSheetComponent } from './filter-bottom-sheet/filter-bottom-sheet.component';
-import * as Sentry from '@sentry/angular';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { environment } from '../environments/environment';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
-Sentry.init({
-  dsn: "https://cd12303fc780ad9d9257719d48da8288@o4508347076444160.ingest.de.sentry.io/4508347079065680",
-  integrations: [
-    // Registers and configures the Tracing integration,
-    // which automatically instruments your application to monitor its
-    // performance, including custom Angular routing instrumentation
-    Sentry.browserTracingIntegration(),
-    // Registers the Replay integration,
-    // which automatically captures Session Replays
-    Sentry.replayIntegration(),
-  ],
-
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for tracing.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-
-  // Set `tracePropagationTargets` to control for which URLs trace propagation should be enabled
-  tracePropagationTargets: [
-    environment.frontendUrl,
-  ],
-  // Capture Replay for 10% of all sessions,
-  // plus for 100% of sessions with an error
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0,
-});
-
-export class SentryErrorHandler implements ErrorHandler {
-  handleError(err:any) : void {
-    Sentry.captureException(err.originalError || err);
-  }
-}
-
+import { StoreComponent } from './pages/store/store.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MoreNavComponent } from './shared/component/more-nav/more-nav.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
 @NgModule({
   declarations: [
     AppComponent,
@@ -138,7 +110,9 @@ export class SentryErrorHandler implements ErrorHandler {
     SettingsPage,
 		ErrorPage,
 		ImageSrcPipe,
-		FileSizePipe
+		FileSizePipe,
+    StoreComponent,
+    MoreNavComponent
   ],
   imports: [
   	CommonModule,
@@ -172,11 +146,16 @@ export class SentryErrorHandler implements ErrorHandler {
     MatNativeDateModule,
     MatFormFieldModule,
     MatInputModule,
+    MatMenuModule,
+    MatBottomSheetModule,
+    MatIconModule,
+    MatButtonModule,
+    MatListModule,
   	QuillModule.forRoot(),
-   ServiceWorkerModule.register('ngsw-worker.js', {
-     enabled: environment.production,
-     registrationStrategy: 'registerWhenStable:30000'
-   })
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [Title, 
   	provideNgxMask(),
@@ -195,21 +174,21 @@ export class SentryErrorHandler implements ErrorHandler {
       useClass: AuthInterceptor,
       multi: true
     },
-    { provide: ErrorHandler, useClass: SentryErrorHandler },
-    {
-      provide: ErrorHandler,
-      useValue: Sentry.createErrorHandler(),
-    },
-    {
-      provide: Sentry.TraceService,
-      deps: [Router],
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => () => {},
-      deps: [Sentry.TraceService],
-      multi: true,
-    },
+    // { provide: ErrorHandler, useClass: SentryErrorHandler },
+    // {
+    //   provide: ErrorHandler,
+    //   useValue: Sentry.createErrorHandler(),
+    // },
+    // {
+    //   provide: Sentry.TraceService,
+    //   deps: [Router],
+    // },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: () => () => {},
+    //   deps: [Sentry.TraceService],
+    //   multi: true,
+    // },
     // { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
 	],
   bootstrap: [ AppComponent ]

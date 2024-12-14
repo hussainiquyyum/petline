@@ -9,4 +9,5 @@ export interface User {
     gender: string;
     dob: Date | null;
     editing?: boolean;
+    _id?: string;
 }

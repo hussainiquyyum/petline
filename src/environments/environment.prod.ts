@@ -4,5 +4,6 @@ export const environment = {
   socketUrl: '',
   apiUrl: '/api',
   uploadUrl: '/',
-  version: '1.1.3'
+  version: '1.2.0',
+  vapidPublicKey: 'BEW1FYAEJq1lZ-gCeEyzAZwLHkkutFBHqUzWRBVK-1DjWjJiTDi-gJRaxKadIPVP7xjxQ1pZg43ioxXZC-bddFY'
 };

@@ -4,6 +4,8 @@ import { FormControl, FormGroup, NgForm, Validators }    from '@angular/forms';
 import { AppSettings } from '../../service/app-settings.service';
 import { AuthService } from '../../service/auth.service';
 import { AppVariablesService } from '../../service/app-variables.service';
+import { finalize } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'page-register',
@@ -16,6 +18,7 @@ export class RegisterPage {
   private authService = inject(AuthService);
   private router = inject(Router);
   public brandName = inject(AppVariablesService).brandName;
+  public isLoading = false;
 
   public form = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -48,15 +51,38 @@ export class RegisterPage {
   }
   
 	formSubmit() {
+    this.isLoading = true;
     // this.router.navigate(['/']);
     // console.log(this.form.value);
-    this.authService.register(this.form.value).subscribe({
+    this.authService.register(this.form.value).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
       next: (res: any) => {
         console.log(res);
+        Swal.fire({
+          title: 'Register Success',
+          text: 'OTP sent to your mobile number',
+          icon: 'success',
+          position: 'top',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          toast: true,
+          timer: 3000
+        });
         this.router.navigate(['/otp'], { queryParams: { phone: this.form.get('mobile')?.value } });
       },
       error: (err: any) => {
         console.log(err);
+        Swal.fire({
+          title: 'Register Error',
+          text: err.error.error,
+          icon: 'error',
+          position: 'top',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          toast: true,
+          timer: 3000
+        });
       }
     });
   }

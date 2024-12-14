@@ -117,6 +117,7 @@ export class OtpComponent implements OnInit, OnDestroy, AfterViewInit {
     this.maskedMobile = '';
     this.isOtpSent = false;
     this.isLoading = false;
+    this.router.navigate(['/auth/login']);
     this.endSubs.next();
     this.endSubs.complete();
   }

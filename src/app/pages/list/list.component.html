@@ -31,36 +31,38 @@
 						@for (item of data; track $index) {
 							<div class="col-xxl-3 col-xl-4 col-lg-6 col-md-4 col-sm-6 pb-4">
 								<!-- BEGIN card -->
-								<card class="h-100">
-									<card-body class="h-100 p-1">
-										<div class="item-card{{listType() == 'list' ? '-list' : ''}}">
-											<!-- <img [src]="getUrl(item.images[0])" alt="Fluffy the Cat"> -->
-											@if (item.images) {
-												<ngb-carousel>
-													<ng-template ngbSlide *ngFor="let image of item.images">
-														<div class="picsum-img-wrapper">
-															<img [src]="image" [alt]="item.breed.name" />
-														</div>
-													</ng-template>
-												</ngb-carousel>
-											}
-											<div class="item-card-content">
-											  <div class="title">{{ item.name }}</div>
-											  <div class="price" *ngIf="isLoggedIn()">{{ item.price | currency:'INR'}}</div>
-											  <div class="price" *ngIf="!isLoggedIn()">₹ XXXXX</div>
-											  <div class="details">
-												<p><span>Breed:</span> {{ item.breed.name }}</p>
-												<p><span>Age:</span> {{ item.age }}</p>
-												<p><span>Gender:</span> {{ item.gender }}</p>
-												<!-- <p><span>Color:</span> {{ item.color }}</p> -->
-											  </div>
-											  <a class="button" href="javascript:;" *ngIf="isLoggedIn()" (click)="openWhatsApp(item.listedBy.phone, 'Hello '+item.listedBy.name+', I am interested in buying the '+item.name+ ' with the following details: \n Breed: '+item.breed.name+', \n Age: '+item.age+', \n Could you provide more details about availability and pricing?')"><i class="bi bi-whatsapp"></i> WhatsApp Seller</a>
-											  <a class="button" href="javascript:;" *ngIf="!isLoggedIn()" [routerLink]="['/login']"><i class="bi bi-login"></i> Login to Contact and see price</a>
-											  <!-- <a class="button" href="javascript:;" (click)="openWhatsApp(item.listedBy.phone, 'Hello '+item.seller.name+', I am interested in buying the '+item.name+ ' with the following details: \n Breed: '+item.breed+', \n Age: '+item.age+', \n Color: '+item.color+'. \n Could you provide more details about availability and pricing?')"><i class="bi bi-whatsapp"></i> WhatsApp Seller</a> -->
+								<div class="card-grid">
+									<div class="item-card-info">
+										@if (item.images) {
+											<ngb-carousel>
+												<ng-template ngbSlide *ngFor="let image of item.images">
+													<div class="picsum-img-wrapper">
+														<img [src]="image" [alt]="item.breed.name" />
+													</div>
+												</ng-template>
+											</ngb-carousel>
+										}
+										<div class="item-card-content">
+											<div class="title">{{ item.name }}</div>
+											<div class="price" *ngIf="isLoggedIn()">{{ item.price | currency:'INR'}}</div>
+											<div class="price" *ngIf="!isLoggedIn()">₹ XXXXX</div>
+											<div class="details">
+												Elegant {{ item.breed.name }}, {{ item.age }} old, {{ item.gender }}, perfect for both casual outings and special occasions.
 											</div>
+											<a class="button" href="javascript:;" *ngIf="isLoggedIn()" 
+											   (click)="openWhatsApp(item.listedBy.phone, 'Hello '+item.listedBy.name+', I am interested in buying the '+item.name+ ' with the following details: \n Breed: '+item.breed.name+', \n Age: '+item.age+', \n Could you provide more details about availability and pricing?')">
+											   <i class="bi bi-whatsapp"></i> WhatsApp Seller
+											</a>
+											<a class="button" href="javascript:;" *ngIf="!isLoggedIn()" [routerLink]="['/login']">
+												<i class="bi bi-box-arrow-in-right"></i> Login to see price
+											</a>
 										</div>
+									</div>
+								</div>
+								<!-- <card class="h-100">
+									<card-body class="h-100 p-1">
 									</card-body>
-								</card>
+								</card> -->
 								<!-- END card -->
 							</div>
 						} @empty {

@@ -9,5 +9,6 @@ export const environment = {
   socketUrl: 'http://localhost:3000',
   apiUrl: 'http://localhost:3000/api',
   uploadUrl: 'http://localhost:3000',
-  version: '1.1.3'
+  version: '1.2.0',
+  vapidPublicKey: 'BEW1FYAEJq1lZ-gCeEyzAZwLHkkutFBHqUzWRBVK-1DjWjJiTDi-gJRaxKadIPVP7xjxQ1pZg43ioxXZC-bddFY'
 };

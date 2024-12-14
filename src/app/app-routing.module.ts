@@ -11,6 +11,7 @@ import { CartComponent } from './pages/cart/cart.component';
 import { SettingsPage } from './pages/settings/settings';
 import { OtpComponent } from './auth/otp/otp.component';
 import { NewListingPage } from './pages/new-listing/new-listing.component';
+import { StoreComponent } from './pages/store/store.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -25,6 +26,8 @@ const routes: Routes = [
   { path: 'home', component: ListPage, data: { title: 'List'} },
   { path: 'cart', component: CartComponent, data: { title: 'Cart'}, canActivate: [AuthGuard] },
   { path: 'settings', component: SettingsPage, data: { title: 'Settings'}, canActivate: [AuthGuard] },
+  { path: 'store', component: StoreComponent, data: { title: 'Store'} },
+  // { path: 'wishlist', component: WishlistComponent, data: { title: 'Wishlist'}, canActivate: [AuthGuard] },
   { path: '**', pathMatch: 'full', redirectTo: '/login' }
 ];
 

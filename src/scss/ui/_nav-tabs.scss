@@ -5,13 +5,16 @@
 				& > .nav-link {
 					border: none;
 					border-bottom: 3px solid transparent;
-					padding: $nav-link-padding-x 0;
+					// padding: $nav-link-padding-x 0;
 					color: var(--#{$prefix}inverse);
-					
+					font-size: 12px;
 					&:hover,
 					&.active {
 						color: $nav-tabs-link-active-color;
 						border-bottom-color: var(--#{$prefix}theme);
+					}
+					i {
+						font-size: 25px;
 					}
 				}
 				&.show {
