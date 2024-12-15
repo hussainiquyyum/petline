@@ -3,8 +3,9 @@
         <nav class="nav-container">
             @for (navBtn of navBtn(); track $index) {
             <div class="nav-item" [class.active]="navBtn.active" (click)="navClick($index)">
-                <i [ngClass]="navBtn.icon + (navBtn.active ? '-fill' : '')"></i>
-                <span class="nav-label">{{ navBtn.name }}</span>
+                <img *ngIf="navBtn.icon === 'img'" [ngClass]="'nav-logo' + (navBtn.active ? '' : '-fill')" src="/assets/icons/icon-128x128.png" alt="navBtn.name">
+                <i *ngIf="navBtn.icon !== 'img'" [ngClass]="navBtn.icon + (navBtn.active ? '-fill' : '')"></i>
+                <span class="nav-label" *ngIf="navBtn.name">{{ navBtn.name }}</span>
             </div>
             }
         </nav>

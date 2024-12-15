@@ -80,8 +80,8 @@ export class NavComponent implements OnInit {
           route: '/care'
         },
         {
-          name: 'Home',
-          icon: 'bi bi-house',
+          name: '',
+          icon: 'img',
           active: true,
           route: '/home'
         },

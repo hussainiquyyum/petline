@@ -31,31 +31,79 @@
 						@for (item of data; track $index) {
 							<div class="col-xxl-3 col-xl-4 col-lg-6 col-md-4 col-sm-6 pb-4">
 								<!-- BEGIN card -->
-								<div class="card-grid">
-									<div class="item-card-info">
-										@if (item.images) {
-											<ngb-carousel>
-												<ng-template ngbSlide *ngFor="let image of item.images">
-													<div class="picsum-img-wrapper">
-														<img [src]="image" [alt]="item.breed.name" />
-													</div>
-												</ng-template>
-											</ngb-carousel>
-										}
-										<div class="item-card-content">
-											<div class="title">{{ item.name }}</div>
-											<div class="price" *ngIf="isLoggedIn()">{{ item.price | currency:'INR'}}</div>
-											<div class="price" *ngIf="!isLoggedIn()">₹ XXXXX</div>
-											<div class="details">
-												Elegant {{ item.breed.name }}, {{ item.age }} old, {{ item.gender }}, perfect for both casual outings and special occasions.
+								<div class="flip-card" [class.expanded]="isFlipped($index)" [attr.data-card-index]="$index">
+									<div class="flip-card-inner" [class.flipped]="isFlipped($index)">
+										<!-- Front Side -->
+										<div class="flip-card-front">
+											@if (item.images && item.images.length > 0) {
+												<img [src]="item.images[0]" [alt]="item.breed.name">
+											}
+											<div class="overlay-content">
+												<div class="text-content">
+													<h3 class="pet-name">{{ item.name }}</h3>
+													@if (isLoggedIn()) {
+														<p class="price">{{ item.price | currency:'INR'}}</p>
+													} @else {
+														<p class="price locked">₹ XXXXX</p>
+													}
+												</div>
+												<div class="action-icons">
+													<button class="icon-btn" *ngIf="isLoggedIn()" >
+														<i class="bi bi-heart"></i>
+													</button>
+													<button class="icon-btn" (click)="toggleFlip($index)">
+														<i class="bi bi-info-circle"></i>
+													</button>
+												</div>
 											</div>
-											<a class="button" href="javascript:;" *ngIf="isLoggedIn()" 
-											   (click)="openWhatsApp(item.listedBy.phone, 'Hello '+item.listedBy.name+', I am interested in buying the '+item.name+ ' with the following details: \n Breed: '+item.breed.name+', \n Age: '+item.age+', \n Could you provide more details about availability and pricing?')">
-											   <i class="bi bi-whatsapp"></i> WhatsApp Seller
-											</a>
-											<a class="button" href="javascript:;" *ngIf="!isLoggedIn()" [routerLink]="['/login']">
-												<i class="bi bi-box-arrow-in-right"></i> Login to see price
-											</a>
+										</div>
+
+										<!-- Back Side -->
+										<div class="flip-card-back">
+											<div class="back-content">
+												<div class="header">
+													@if (item.images) {
+														<ngb-carousel>
+															<ng-template ngbSlide *ngFor="let image of item.images">
+																<div class="picsum-img-wrapper">
+																	<img [src]="image" [alt]="item.breed.name" />
+																</div>
+															</ng-template>
+														</ngb-carousel>
+													}
+												</div>
+												<h3>{{ item.name }}</h3>
+												
+												<div class="details">
+													<p><strong>Breed:</strong> {{ item.breed.name }}</p>
+													<p><strong>Age:</strong> {{ item.age }}</p>
+													<p><strong>Gender:</strong> {{ item.gender }}</p>
+													<p><strong>Price:</strong> 
+														@if (isLoggedIn()) {
+															{{ item.price | currency:'INR'}}
+														} @else {
+															<span class="locked">Login to see price</span>
+														}
+													</p>
+												</div>
+
+												@if (isLoggedIn()) {
+													<button class="whatsapp-btn" (click)="openWhatsApp(item.listedBy.phone, 
+														'Hello '+item.listedBy.name+', I am interested in buying the '+item.name+ 
+														' with the following details: \n Breed: '+item.breed.name+', \n Age: '+item.age+
+														', \n Could you provide more details about availability and pricing?')">
+														<i class="bi bi-whatsapp"></i> Contact Seller
+													</button>
+												} @else {
+													<button class="login-btn" [routerLink]="['/login']">
+														<i class="bi bi-box-arrow-in-right"></i> Login to see price
+													</button>
+												}
+
+												<button class="back-btn" (click)="toggleFlip($index)">
+													<i class="bi bi-arrow-left"></i> Back
+												</button>
+											</div>
 										</div>
 									</div>
 								</div>

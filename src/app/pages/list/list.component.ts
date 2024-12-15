@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnDestroy, OnInit, signal, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppSettings } from '../../service/app-settings.service';
 import { MenuService } from '../../service/menu.service';
@@ -35,7 +35,7 @@ interface DataResponse {
     standalone: false
 })
 
-export class ListPage implements OnInit, OnDestroy {
+export class ListPage implements OnInit, OnDestroy, AfterViewInit {
 	listType = signal<'long' | 'list'>('long');
 	public brandName = inject(AppVariablesService).brandName;	
 	menu: any = {};
@@ -95,6 +95,10 @@ export class ListPage implements OnInit, OnDestroy {
 	animals: any;
 	breeds: Breed[] = [];
 	isLoggedIn = signal(false);
+	flippedCards: { [key: number]: boolean } = {};
+
+	private observers: { [key: number]: IntersectionObserver } = {};
+
 	constructor(
 		private appSettings: AppSettings, 
 		private http: HttpClient
@@ -246,6 +250,10 @@ export class ListPage implements OnInit, OnDestroy {
 		this._petsService.getPets(this.params).pipe(takeUntil(this.destroy$), finalize(() => {
 			this.isLoading.set(false)
 			this.loadingMore.set(false)
+			// Setup observers for new cards
+			setTimeout(() => {
+				this.setupCardObservers();
+			});
 		})).subscribe({
 			next: (response) => {
 				this.data = [...this.data, ...response.pets];
@@ -255,13 +263,73 @@ export class ListPage implements OnInit, OnDestroy {
 		});
 	}
 
+	toggleFlip(index: number) {
+		this.flippedCards[index] = !this.flippedCards[index];
+		
+		// Set up observer when card is flipped
+		if (this.flippedCards[index]) {
+			const card = document.querySelector(`[data-card-index="${index}"]`);
+			if (card) {
+				this.setupObserver(card as HTMLElement, index);
+			}
+		}
+	}
 
-  ngOnDestroy() {
-    this.appSettings.appHeaderNone = false;
-    this.appSettings.appSidebarNone = false;
-    this.appSettings.appContentClass = '';
-    this.appSettings.appContentFullHeight = false;
-  }
+	isFlipped(index: number): boolean {
+		return this.flippedCards[index] || false;
+	}
+
+	ngAfterViewInit() {
+		// Set up observers after view is initialized
+		setTimeout(() => {
+			this.setupCardObservers();
+		});
+	}
+
+	private setupCardObservers() {
+		this.data.forEach((_, index) => {
+			const card = document.querySelector(`[data-card-index="${index}"]`);
+			if (card) {
+				this.setupObserver(card as HTMLElement, index);
+			}
+		});
+	}
+
+	private setupObserver(element: HTMLElement, index: number) {
+		// Remove existing observer if any
+		if (this.observers[index]) {
+			this.observers[index].disconnect();
+		}
+
+		// Create new observer
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach(entry => {
+					if (!entry.isIntersecting && this.flippedCards[index]) {
+						// Card is not visible and is flipped - flip it back
+						this.toggleFlip(index);
+					}
+				});
+			},
+			{
+				threshold: 0.1 // Card will trigger when 10% visible/invisible
+			}
+		);
+
+		observer.observe(element);
+		this.observers[index] = observer;
+	}
+
+	ngOnDestroy() {
+		// Clean up observers
+		Object.values(this.observers).forEach(observer => observer.disconnect());
+		this.observers = {};
+		
+		this.appSettings.appHeaderNone = false;
+		this.appSettings.appSidebarNone = false;
+		this.appSettings.appContentClass = '';
+		this.appSettings.appContentFullHeight = false;
+	}
 }
 function takeUntilDestroyed(destroyRef: DestroyRef): <T>(source: Observable<T>) => Observable<T> {
 	const destroy$ = new Subject<void>();

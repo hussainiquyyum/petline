@@ -2,6 +2,15 @@
   padding: 0 8px;
 }
 
+.nav-logo, .nav-logo-fill {
+  width: 40px;
+  height: 40px;
+}
+
+.nav-logo-fill {
+  filter: brightness(0) invert(1);
+}
+
 .nav-container {
   display: flex;
   justify-content: space-between;
